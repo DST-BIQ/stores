@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static stores.group.console.application.Model.DB_NAME;
-
 public class Controller {
     private MysqlDataSource ds = new MysqlDataSource();
     private Connection conn = null;
     static final String USER = "root";
     static final String PASS = "root";
+    static final String DB_NAME = "excercise_biq";
+
     Scanner scanner;
 
 

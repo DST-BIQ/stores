@@ -1,102 +1,14 @@
 package storesgroup;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-
 import java.sql.*;
 
 public class Model {
 
-    //    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-//    static final String DB_URL = "jdbc:mysql://localhost/";
-    static final String DB_NAME = "excercise_biq";
 
-    //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "root";
-    private Connection conn = null;
-    private Statement stmt = null;
-    private MysqlDataSource ds = new MysqlDataSource();
     Controller controller = new Controller();
     View view = new View();
 
 
-//        /**
-//         * creates new chain of stores
-//         *
-//         * @param chainName - string of the chain name
-//         */
-//        public void createChain(String chainName) {
-//            try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("INSERT INTO `excercise_biq`.`chain`   (Name) VALUES (?);")
-//            ) {
-//
-//                stmt.setString(1, chainName);
-//                int result = stmt.executeUpdate();
-//                if (result == 0) {
-//                    System.out.println("no updates were done");
-//                } else {
-//                    System.out.println("number of inserted records:  " + result);
-//                }
-//            } catch (SQLException e) {
-//                // TODO
-//            }
-//
-//        }
-
-//
-//        //TODO like employee
-//        public void addStore(String name, int chainID, int shoppingMallID, int cityID, String streetAddress) {
-//
-////        INSERT INTO `excercise_biq`.`store` (`idStore`, `Name`, `groupID`, `ShoppingMallStore`, `shoppingMallID`) VALUES (?,?,?,?,?);
-//
-//            try (Connection conn = getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("INSERT INTO `excercise_biq`.`store` (`Name`, `chainID`, `shoppingMallID`, `cityID`,`StreetAddress`) VALUES (?,?,?,?,?);")
-//            ) {
-//
-//                stmt.setString(1, name);
-//                stmt.setInt(2, chainID);
-//                stmt.setInt(3, shoppingMallID);
-//                stmt.setInt(4, cityID);
-//                stmt.setString(5, streetAddress);
-//
-//                int result = stmt.executeUpdate();
-//                if (result == 0) {
-//                    System.out.println("no updates were done");
-//                } else {
-//                    System.out.println("number of inserted records:  " + result);
-//                }
-//
-//
-//            } catch (SQLException e) {
-//                System.out.println(e.getErrorCode());
-//            }
-//
-//
-//        }
-
-//        public void updateStore(int idStore, int groupID) {
-//// TODO update store in chain
-////        UPDATE `excercise_biq`.`store` SET `groupID`='2' WHERE `idStore`='3' and`groupID`='1';
-//
-//            try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("UPDATE `excercise_biq`.`store` `groupID`=? WHERE `idStore`=?;")
-//            ) {
-//
-//                stmt.setInt(2, idStore);
-//                stmt.setInt(1, groupID);
-//
-//
-//                int result = stmt.executeUpdate();
-//                if (result == 0) {
-//                    System.out.println("no updates were done");
-//                } else {
-//                    System.out.println("number of inserted records:  " + result);
-//                }
-//
-//
-//            } catch (SQLException e) {
-//                // TODO
-//            }
-//
-//
-//        }
 
     /**
      * add employee to chain or to store
@@ -231,58 +143,5 @@ public class Model {
 
 }
 
-//    public void updateEmployee(int ID, boolean isManagement) {
-//        try (Connection conn = getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("UPDATE `excercise_biq`.`eployee` `isManagement`=? WHERE `ID`=?;")
-//        ) {
-//
-//            stmt.setBoolean(1, isManagement);
-//            stmt.setInt(1, ID);
-//
-//
-//            int result = stmt.executeUpdate();
-//            if (result == 0) {
-//                System.out.println("no updates were done");
-//            } else {
-//                System.out.println("number of inserted records:  " + result);
-//            }
-//
-//
-//        } catch (SQLException e) {
-//            // TODO
-//        }
-//
-//    }
-
-//        public void presentShopsInMall() {
-//
-////        SELECT name FROM excercise_biq.store WHERE ShoppingMallStore=1 ;
-//            try (Connection conn = getConnectionToDB(); Statement stmt = conn.createStatement();
-//                 ResultSet rs = stmt.executeQuery("SELECT name FROM excercise_biq.store WHERE ShoppingMallStore=1")) {
-//
-////           rs = stmt.executeQuery("SELECT version()");
-//                while (rs.next()) {
-//                    System.out.println("Store name : " + rs.getString(1));
-//
-//                }
-//            } catch (SQLException e) {
-//                // TODO
-//            }
-//
-//        }
-//
-//        public void presentShopsInMallGroup() {
-//
-//        }
-//
-//        public void presentEmployeesInChain() {
-//
-//        }
-//
-//        public void presentShopDetails() {
-//
-//        }
-//
-//
-//    }
 
 
