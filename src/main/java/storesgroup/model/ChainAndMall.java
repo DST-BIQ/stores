@@ -2,9 +2,7 @@ package storesgroup.model;
 
 import storesgroup.Controller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ChainAndMall {
 
@@ -30,7 +28,24 @@ public class ChainAndMall {
         }
     }
 
+    public void viewAllChains() {
 
+        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("Select idChain as ID,Name as Name from chain;")
+        ) {
+            System.out.println("Displayed chains  :  ");
+
+            while (rs.next()) {
+                System.out.print("Chain ID : " + rs.getString(1));
+                System.out.println("   Chain Name : " + rs.getString(2));
+
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+    }
 }
 
 

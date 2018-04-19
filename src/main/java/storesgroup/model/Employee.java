@@ -1,18 +1,17 @@
 package storesgroup.model;
 
 import storesgroup.Controller;
-import storesgroup.View;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Employee {
 
-
     Controller controller = new Controller();
-    View view = new View();
+
+    ChainAndMall chainAndMall = new ChainAndMall();
     Store store = new Store();
-
-
 
     /**
      * add employee to chain or to store
@@ -34,7 +33,7 @@ public class Employee {
                 stmt.setBoolean(3, true);
                 stmt.setInt(4, 99);
 
-                view.viewAllChains();
+                chainAndMall.viewAllChains();
                 System.out.println("Select a chain from the Available chains:  ");
                 selectedValue = controller.selectFromScanner();
                 stmt.setInt(5, selectedValue);
@@ -43,7 +42,7 @@ public class Employee {
                 stmt.setBoolean(3, false);
 
 
-                view.viewAllStores();
+                store.viewAllStores();
                 System.out.println("Select a Store from the Available stores:  ");
                 selectedValue = controller.selectFromScanner();
                 stmt.setInt(4, selectedValue);
@@ -69,7 +68,6 @@ public class Employee {
     }
 
 
-
     private String getGenerateEmployeeID(int count) {
 
 
@@ -86,10 +84,6 @@ public class Employee {
 
         return builder.toString();
     }
-
-
-
-
 
 
 }
