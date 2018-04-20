@@ -1,56 +1,20 @@
 package storesgroup;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import storesgroup.model.ChainAndMall;
+import storesgroup.model.Employee;
+import storesgroup.model.Store;
 
 public class View {
-
+    //
+    ChainAndMall chainAndMall = new ChainAndMall();
+    Employee employee = new Employee();
     Controller controller = new Controller();
-//    private Statement stmt = null;
+    Store store;
 
-    public void viewAllStores() {
-
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select idStore as ID,Name as Name from store;")
-        ) {
-            System.out.println("Displayed Stores  :  ");
-
-            while (rs.next()) {
-                System.out.print("Store ID : " + rs.getString(1));
-                System.out.println("   Store Name : " + rs.getString(2));
-
-            }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
+    public View() {
 
 
     }
-
-
-    public void viewAllChains() {
-
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select idChain as ID,Name as Name from chain;")
-        ) {
-            System.out.println("Displayed chains  :  ");
-
-            while (rs.next()) {
-                System.out.print("Chain ID : " + rs.getString(1));
-                System.out.println("   Chain Name : " + rs.getString(2));
-
-            }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-    }
-
 
 
     public static void printMenu() {
@@ -64,4 +28,14 @@ public class View {
 
 
     }
+
+
+
+
+    private static void printMessageToConsole(String message) {
+        System.out.println(message);
+    }
 }
+
+
+
