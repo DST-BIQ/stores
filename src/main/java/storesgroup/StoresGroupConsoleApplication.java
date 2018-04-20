@@ -37,6 +37,7 @@ View view = new View();
                     // create new chain
                     printMessageToConsole("please enter a name for the new chain");
                     chainAndMall.createChain(controller.getStringFromScanner());
+
 //TODO DORIT
                     break;
                 case 2:
@@ -86,7 +87,7 @@ View view = new View();
 
     }
 
-    private static void printMessageToConsole(String message) {
+    public static void printMessageToConsole(String message) {
         System.out.println(message);
     }
 }
