@@ -1,4 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 /.idea/uiDesigner.xml
 /.idea/workspace.xml
-/.idea/workspace.xml
+/.idea/misc.xml
+/target/
+.idea/inspectionProfiles/
+src/main/resources/
+target/
