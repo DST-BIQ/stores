@@ -1,5 +1,0 @@
-package storesgroup;
-
-class ControllerTest {
-
-}

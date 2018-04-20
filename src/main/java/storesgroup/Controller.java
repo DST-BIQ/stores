@@ -4,7 +4,9 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -33,7 +35,7 @@ public class Controller {
     public int selectFromScanner() {
         boolean correctInput = false;
         int selection = -1;
-        while (!correctInput){
+        while (!correctInput) {
             try {
 
                 selection = scanner.nextInt();
@@ -43,7 +45,6 @@ public class Controller {
                 System.out.println("wrong format selection, please try again");
             }
         }
-
 
 
         return selection;
@@ -75,7 +76,35 @@ public class Controller {
     }
 
 
-    public void tearDown(){
+    public void tearDown() {
         scanner.close();
+    }
+
+
+    /**
+     * Select column from database. return result set result
+     *
+     * @param tableName       = FROM what table we wish to retrieve the data
+     * @param selectCondition = WHERE part of select
+     * @param selection       - SELECT part of query
+     */
+    public String selectFromDatabase(String tableName, String selectCondition, String selection) {
+        Controller controller = new Controller();
+
+        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("Select " + selection + " from " + tableName + " where " + selectCondition + ";")
+        ) {
+            if (rs.next()) {
+                System.out.println("this is the resource name answer   " + rs.getString(1));
+                return rs.getString(1);
+
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+
+        return null;
     }
 }
