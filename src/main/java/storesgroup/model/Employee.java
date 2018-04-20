@@ -4,6 +4,7 @@ import storesgroup.Controller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Employee {
@@ -86,6 +87,34 @@ public class Employee {
     }
 
 
+    public void presentAllEmployeesOfChain() {
+        int selectedValue = 0;
+            try (Connection conn = controller.getConnectionToDB();PreparedStatement stmt = conn.prepareStatement("SELECT first_name,last_name FROM stores.employees WHERE chainID=?;");
+        ) {
+
+
+            chainAndMall.viewAllChains();
+            System.out.println("Select a chain from the Available chains:  ");
+            selectedValue = controller.selectFromScanner();
+            stmt.setInt(1, selectedValue);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    System.out.println("Displayed Employees  :  ");
+
+                    while (rs.next()) {
+                        System.out.print("employee first name : " + rs.getString(1));
+                        System.out.println("  employee last name : " + rs.getString(2));
+
+                    }
+                }
+
+
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+
+    }
 }
 
 

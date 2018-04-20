@@ -44,7 +44,8 @@ View view = new View();
 // add store to chain
                     printMessageToConsole("enter store name");
                     valueForInput = controller.getStringFromScanner();
-//TODO STAV
+                    store.addStoreToChain(valueForInput);
+//DONE
                     break;
                 case 3:
 // add employee to chain
@@ -70,7 +71,11 @@ View view = new View();
                     break;
 
                 case 6:
-                    //TODO STAV
+
+//Present all Employees of a certain Chain
+                    employee.presentAllEmployeesOfChain();
+
+//DONE
                     break;
 
                 case 7:
