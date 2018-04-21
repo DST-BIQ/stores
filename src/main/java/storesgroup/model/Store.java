@@ -1,53 +1,48 @@
 package storesgroup.model;
 
 import storesgroup.Controller;
+import storesgroup.View;
 
 import java.sql.*;
 
 public class Store {
 
 
-    Controller controller = new Controller();
-    ChainAndMall chainAndMall = new ChainAndMall();
+    Controller controller;
+    ChainAndMall chainAndMall;
+    View view;
+    Connection connection;
 
 
+    public Store(View view, Controller controller) throws SQLException {
+        this.controller=controller;
+        this.view=view;
+        chainAndMall = new ChainAndMall(view,controller);
+        connection = controller.getConnectionToDB();
+    }
 
-
-
-    public String getChainIDfromStore(int selectedValue) {
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT chainID from store where idStore=" + selectedValue + ";")) {
+    public String getChainIDfromStore(int selectedValue) throws SQLException {
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT chainID from store where idStore=" + selectedValue);
 
             while (rs.next()) {
 
                 return rs.getString(1);
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
         return null;
     }
 
-    public void viewAllStores() {
+    public void viewAllStores() throws SQLException {
 
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select idStore as ID,Name as Name from store;")
-        ) {
-            System.out.println("Displayed Stores  :  ");
+        Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("Select id as ID,store_name as Name from stores;");
+
+            view.printMessage("Displayed Stores  :  ");
 
             while (rs.next()) {
                 System.out.print("Store ID : " + rs.getString(1));
                 System.out.println("   Store Name : " + rs.getString(2));
-
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
 
     }
 
@@ -58,50 +53,70 @@ public class Store {
 
     public void presentStoreDetails(int storeId) throws SQLException {
 
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT store_name,stores.chain, stores.cityId, stores.StreetAddress, stores.mallId, chain.name, cities.name, shoppingmalls.name  FROM stores, chain, cities, shoppingmalls WHERE stores.id=" + storeId + " AND " +
-                         "stores.chain = chain.idchain AND stores.cityId = cities.id AND stores.mallId = shoppingmalls.id" )) {
 
-                while (rs.next()) {
-                    System.out.println("name : " + rs.getString(2));
-                    System.out.println("chain : " + rs.getString(6));
-                    System.out.println("City : " + rs.getString(7));
-                    System.out.println("Street Address : " + rs.getString(4));
-                    System.out.println("Mall : " + rs.getString(8));
+             PreparedStatement stmt = connection.prepareStatement("SELECT store_name AS 'Store Name', chain.name AS 'Chain', cities.name AS 'City', StreetAddress AS 'Street Address', shoppingmalls.name AS 'Mall', shoppingmalls.StreesAddress AS 'Mall Street Address' FROM stores\n" +
+                     "LEFT JOIN chain ON stores.chain = chain.idchain\n" +
+                     "LEFT JOIN cities ON stores.cityId = cities.id\n" +
+                     "LEFT JOIN shoppingmalls ON stores.mallId = shoppingmalls.id\n" +
+                     "WHERE stores.id=?" );
+             stmt.setInt(1,storeId);
+             ResultSet rs = stmt.executeQuery();
+             if (!rs.next()){
+                    view.printMessage("No store with the requested ID was found");
+                    return;
+                }else {
 
-
-
+                 view.printRecord(rs, this);
+                 view.printMessage("");
                 }
-            } catch (SQLException e) {
-            System.out.println("An error has occurred: "+e.getMessage());
-            }
+
     }
 
-    public void addStoreToChain(String storeName) throws SQLException {
+    public void presentStoresInMall(int mallId) throws SQLException {
+
+
+            PreparedStatement stmt = connection.prepareStatement("SELECT store_name AS 'Store', storeNumberInMall AS 'Store Number In Mall' FROM  stores WHERE mallId=? ");
+            stmt.setInt(1,mallId);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()){
+                view.printMessage("No stores in selected mall");
+                return;
+            }else{
+                view.printMessage("Stores in selected mall are:");
+                view.printRecord(rs, this);
+            }
+
+                while (rs.next()) {
+                    view.printRecord(rs, this);
+                }
+                view.printMessage("");
+
+    }
+
+    public void addStoreToChain(String storeName)  {
         int selectedValue = 0;
-        try (Connection conn = controller.getConnectionToDB();PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`stores` (store_name,chain) values (?,?);");
+        try (Connection conn = controller.getConnectionToDB();
+             PreparedStatement stmt = conn.prepareStatement("insert into `stores` (store_name,chain) values (?,?);")
         ) {
             stmt.setString(1, storeName);
 
                 chainAndMall.viewAllChains();
-                System.out.println("Select a chain from the Available chains:  ");
+                view.printMessage("Select a chain from the Available chains:  ");
                 selectedValue = controller.selectFromScanner();
                 stmt.setInt(2, selectedValue);
-
-
             int result = stmt.executeUpdate();
             if (result == 0) {
-                System.out.println("no updates were done");
+                view.printMessage("no updates were done");
             } else {
-                System.out.println("number of inserted records:  " + result);
+                view.printMessage("Store was added successfully");
             }
 
 
         } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
+            view.printMessage(""+e.getErrorCode());
         }
 
-    }
+     }
     }
 
 
