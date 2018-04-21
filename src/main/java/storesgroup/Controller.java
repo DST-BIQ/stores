@@ -3,19 +3,18 @@ package storesgroup;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import static storesgroup.StoresGroupConsoleApplication.printMessageToConsole;
 
 public class Controller {
     private MysqlDataSource ds = new MysqlDataSource();
     private Connection conn = null;
     static final String USER = "root";
     static final String PASS = "root";
-    static final String DB_NAME = "excercise_biq";
+    static final String DB_NAME = "stores";
 
     Scanner scanner;
 
@@ -106,5 +105,66 @@ public class Controller {
         }
 
         return null;
+    }
+
+    /**
+     * delete row from database
+     *      * @param tableName       = FROM what table we wish to retrieve the data
+     * @param deleteCondition = WHERE part of select
+     * @return true/false
+     */
+    public boolean deleteFromDatabase(String tableName, String deleteCondition) {
+        Controller controller = new Controller();
+String sql = "delete from "+tableName+" where "+deleteCondition+";";
+        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                printMessageToConsole("no updates were done");
+                return false;
+            } else {
+                printMessageToConsole("deleted successfully from:  "+tableName+ ":  " + deleteCondition );
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+
+        return false;
+    }
+
+
+    /**
+     * insert value into the database
+     * @param tableName = FROM what table we wish to retrieve the data
+     * @param field = which field(s) to update
+     * @param fieldValue = list of value(s) matching the fields
+     ** @return true/false
+     */
+    public boolean insertIntoDatabase(String tableName, String field,String fieldValue) {
+        Controller controller = new Controller();
+
+
+        String sql = "insert into "+tableName+" ("+field+")";
+        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement(sql+" values (?);");
+        ) {
+            stmt.setString(1, fieldValue);
+
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                printMessageToConsole("no updates were done");
+                return false;
+            } else {
+                printMessageToConsole("inserted successfully to:  "+tableName+ ":  " + field );
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+
+        return false;
     }
 }
