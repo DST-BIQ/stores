@@ -13,7 +13,7 @@ public class Controller {
     private Connection conn = null;
     static final String USER = "root";
     static final String PASS = "root";
-    static final String DB_NAME = "excercise_biq";
+    static final String DB_NAME = "stores_group";
 
     Scanner scanner;
 
