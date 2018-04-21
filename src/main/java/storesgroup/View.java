@@ -33,7 +33,7 @@ public class View {
 
 
 
-    private static void printMessageToConsole(String message) {
+    public static void printMessageToConsole(String message) {
         System.out.println(message);
     }
 }

@@ -1,10 +1,9 @@
 package storesgroup.model;
 
 import storesgroup.Controller;
+import storesgroup.View;
 
 import java.sql.*;
-
-import static storesgroup.StoresGroupConsoleApplication.printMessageToConsole;
 
 public class ChainAndMall {
 
@@ -16,15 +15,16 @@ public class ChainAndMall {
      * @param chainName - String icludes the chain nmae
      */
     public void createChain(String chainName) {
+        View view = new View();
         try (Connection conn = controller.getConnectionToDB();
              PreparedStatement stmt = conn.prepareStatement("insert into chain (Name) values (?)")
         ) {
             stmt.setString(1, chainName);
             int result = stmt.executeUpdate();
             if (result == 0) {
-                printMessageToConsole("no updates were done");
+                view.printMessageToConsole("no updates were done");
                 } else {
-                printMessageToConsole("New chain was inserted to DB  " + chainName);
+                view.printMessageToConsole("New chain was inserted to DB  " + chainName);
             }
 
 
