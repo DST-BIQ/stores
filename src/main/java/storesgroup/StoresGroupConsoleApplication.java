@@ -8,8 +8,9 @@ import java.sql.SQLException;
 
 public class StoresGroupConsoleApplication {
     //TODO ALL - unit tests, documentation
-
-
+    ChainAndMall chainAndMall;
+    Employee employee;
+    Store store;
     public static void main(String[] args) {
 
         StoresGroupConsoleApplication app = new StoresGroupConsoleApplication();
@@ -24,50 +25,54 @@ public class StoresGroupConsoleApplication {
     public  void consoleApplication() throws SQLException {
         View view = new View();
         Controller controller = new Controller();
-        ChainAndMall chainAndMall = new ChainAndMall();
-        Employee employee = new Employee();
-        Store store = new Store();
+        chainAndMall = new ChainAndMall(view,controller);
+        employee = new Employee(view,controller);
+        store = new Store(view,controller);
         int selection = 0;
         while (selection != 999) {
             view.printMenu();
-            String valueForInput = null;
+            String valueForInput;
             selection = controller.selectFromScanner();
             switch (selection) {
 
                 case 1:
                     // create new chain
-                    printMessageToConsole("please enter a name for the new chain");
+                    view.printMessage("please enter a name for the new chain");
                     chainAndMall.createChain(controller.getStringFromScanner());
 
 //TODO DORIT
                     break;
                 case 2:
 // add store to chain
-                    printMessageToConsole("enter store name");
+                    view.printMessage("enter store name");
                     valueForInput = controller.getStringFromScanner();
                     store.addStoreToChain(valueForInput);
 //DONE
                     break;
                 case 3:
 // add employee to chain
-                    printMessageToConsole("enter employee name");
-                    valueForInput = controller.getStringFromScanner();
-                    employee.addEmployee(valueForInput, true);
+                    view.printMessage("enter employee first name");
+                    String firstName = controller.getStringFromScanner();
+                    view.printMessage("enter employee last name");
+                    String lastName = controller.getStringFromScanner();
+                    employee.addEmployee(firstName,lastName, true);
                     break;
 //DONE
                 case 4:
-                    printMessageToConsole("enter employee name");
-                    valueForInput = controller.getStringFromScanner();
-                    employee.addEmployee(valueForInput, false);
+                    view.printMessage("enter employee first name");
+                    firstName = controller.getStringFromScanner();
+                    view.printMessage("enter employee last name");
+                    lastName = controller.getStringFromScanner();
+                    employee.addEmployee(firstName,lastName, false);
 // add employee to store
                     break;
 //DONE
                 case 5:
-// Present all details of a Shop
-                    valueForInput = controller.getStringFromScanner();
-                    printMessageToConsole("Presenting all details of a shop:   " + valueForInput);
-
-                    store.presentStoreDetails(Integer.valueOf(valueForInput));
+// Present all shops of a mall
+                    view.printMessage("Please enter a mall id from the list bellow:");
+                    chainAndMall.viewAllMalls();
+                    int mallId = controller.selectFromScanner();
+                    store.presentStoresInMall(mallId);
 //TODO DORIT
                     break;
 
@@ -75,12 +80,11 @@ public class StoresGroupConsoleApplication {
 
 //Present all Employees of a certain Chain
                     employee.presentAllEmployeesOfChain();
-
-//DONE
                     break;
 
                 case 7:
-                    store.presentStoreDetails(5);
+                    view.printMessage("Please enter store ID");
+                    store.presentStoreDetails(controller.selectFromScanner());
                     break;
 
                 default:
@@ -92,10 +96,6 @@ public class StoresGroupConsoleApplication {
         }
         controller.tearDown();
 
-    }
-
-    public  void printMessageToConsole(String message) {
-        System.out.println(message);
     }
 }
 
