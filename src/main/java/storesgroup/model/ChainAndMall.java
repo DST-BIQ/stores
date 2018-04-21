@@ -20,6 +20,7 @@ public class ChainAndMall {
 
     /**
      * create new chain of stores to the database.
+     *
      * @param chainName - String icludes the chain nmae
      */
     public void createChain(String chainName) throws SQLException {
@@ -61,6 +62,30 @@ public class ChainAndMall {
             while (rs.next()) {
                 view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
             }
+    }
+
+
+    public int getChainID(String chainName) {
+
+        String sql = "Select idchain as ID,name as Name from chain where name = \"" + chainName + "\"";
+
+
+        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
+
+             ResultSet rs = stmt.executeQuery(sql)
+        ) {
+            System.out.println("Displayed chains  :  ");
+
+            if (rs.next()) {
+                return rs.getInt(1);
+
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+        return -1;
     }
 }
 
