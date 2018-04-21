@@ -43,6 +43,7 @@ public class Controller {
 
             } catch (InputMismatchException e) {
                 System.out.println("wrong format selection, please try again");
+                return 999;
             }
         }
 
