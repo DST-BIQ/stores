@@ -2,10 +2,7 @@ package storesgroup.model;
 
 import storesgroup.Controller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Random;
 
 public class Employee {
@@ -80,59 +77,6 @@ public class Employee {
 
     }
 
-//    /**
-//     * add employee to chain or to store
-//     *
-//     * @param employeeName
-//     * @param toChain      - true - to chain, false = to store
-//     */
-//    public void addEmployee(String employeeName, boolean toChain) {
-//
-//        int selectedValue;
-//        try (Connection conn = controller.getConnectionToDB();
-//             PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`employees` (id,first_name,isManager,storeID,chainID) values (?,?,?,?,?);");
-//        ) {
-//            stmt.setString(2, employeeName);
-//            stmt.setString(1, getGenerateEmployeeID(5));
-//
-//
-//            if (toChain) {
-//                stmt.setBoolean(3, true);
-//                stmt.setInt(4, 99);
-//
-//                chainAndMall.viewAllChains();
-//                System.out.println("Select a chain from the Available chains:  ");
-//                selectedValue = controller.selectFromScanner();
-//                stmt.setInt(5, selectedValue);
-//
-//            } else {
-//                stmt.setBoolean(3, false);
-//
-//
-//                store.viewAllStores();
-//                System.out.println("Select a Store from the Available stores:  ");
-//                selectedValue = controller.selectFromScanner();
-//                stmt.setInt(4, selectedValue);
-//
-//// set chain according to the store selected
-//
-//                stmt.setInt(5, Integer.valueOf(store.getChainIDfromStore(selectedValue)));
-//            }
-//
-//
-//            int result = stmt.executeUpdate();
-//            if (result == 0) {
-//                System.out.println("no updates were done");
-//            } else {
-//                System.out.println("number of inserted records:  " + result);
-//            }
-//
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getErrorCode());
-//        }
-//
-//    }
 
 
     int getGenerateEmployeeID(int count) {
@@ -171,6 +115,8 @@ public class Employee {
         }
 
     }
+
+
 }
 
 

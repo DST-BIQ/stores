@@ -8,10 +8,7 @@ public class Store {
 
 
     Controller controller = new Controller();
-    ChainAndMall chainAndMall = new ChainAndMall();
-
-
-
+//    ChainAndMall chainAndMall = new ChainAndMall();
 
 
     public int getChainIDfromStore(int selectedValue) {
@@ -20,7 +17,7 @@ public class Store {
 
             while (rs.next()) {
 
-//                return rs.getString(1);
+
                 return rs.getInt(1);
             }
 
@@ -53,36 +50,32 @@ public class Store {
     }
 
 
-
-
-
-
     public void presentStoreDetails(String storeName) throws SQLException {
 
         try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT name FROM store.stores WHERE ShoppingMallStore=1")) {
+             ResultSet rs = stmt.executeQuery("SELECT name FROM store.stores WHERE ShoppingMallStore=1")) {
 
-                while (rs.next()) {
-                    System.out.print("ID : " + rs.getString(1)+",");
-                    System.out.println("name : " + rs.getString(2));
-                    System.out.println("chain ID : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
+            while (rs.next()) {
+                System.out.print("ID : " + rs.getString(1) + ",");
+                System.out.println("name : " + rs.getString(2));
+                System.out.println("chain ID : " + rs.getString(2));
+                System.out.println("Store name : " + rs.getString(2));
+                System.out.println("Store name : " + rs.getString(2));
+                System.out.println("Store name : " + rs.getString(2));
+                System.out.println("Store name : " + rs.getString(2));
 
 
-                }
-            } catch (SQLException e) {
-                // TODO
             }
+        } catch (SQLException e) {
+            // TODO
+        }
     }
 
-    public void addStoreToChain(String storeName,int chainID) throws SQLException {
-        try (Connection conn = controller.getConnectionToDB();PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`stores` (store_name,chain) values (?,?);");
+    public void addStoreToChain(String storeName, int chainID) throws SQLException {
+        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`stores` (store_name,chain) values (?,?);");
         ) {
             stmt.setString(1, storeName);
-                stmt.setInt(2, chainID);
+            stmt.setInt(2, chainID);
 
 
             int result = stmt.executeUpdate();
@@ -98,7 +91,30 @@ public class Store {
         }
 
     }
+
+
+    public int getStoreID(String storeName) {
+
+        String sql = "Select id as ID,store_name as Name from stores where store_name = \"" + storeName + "\"";
+
+
+        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
+
+             ResultSet rs = stmt.executeQuery(sql)
+        ) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+        return -1;
     }
+}
 
 
 
