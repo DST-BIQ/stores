@@ -1,38 +1,47 @@
 package storesgroup.model;
 
 import storesgroup.Controller;
+import storesgroup.View;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Employee {
 
-    Controller controller = new Controller();
+    private Controller controller;
+    private View view;
+    Connection connection;
 
-    ChainAndMall chainAndMall = new ChainAndMall();
-    Store store = new Store();
+    private ChainAndMall chainAndMall;
+    private Store store;
+
+    public Employee(View view, Controller controller) throws SQLException {
+        this.view = view;
+        this.controller=controller;
+        chainAndMall = new ChainAndMall(view, controller);
+        store = new Store(view,controller);
+        connection = controller.getConnectionToDB();
+    }
 
     /**
      * add employee to chain or to store
      *
-     * @param employeeName
+     * @param employeeFirstName
      * @param toChain      - true - to chain, false = to store
      */
-    public void addEmployee(String employeeName, boolean toChain) {
+    public void addEmployee(String employeeFirstName, String employeeLastName, boolean toChain) throws SQLException {
 
         int selectedValue = 0;
-        try (Connection conn = controller.getConnectionToDB();
-             PreparedStatement stmt = conn.prepareStatement("insert into `excercise_biq`.`employee` (ID,Name,isManagement,storeID,chainID) values (?,?,?,?,?);");
-        ) {
-            stmt.setString(2, employeeName);
-            stmt.setString(1, getGenerateEmployeeID(5));
+
+             PreparedStatement stmt = connection.prepareStatement("insert into employees (first_name,last_name,isManager,storeID,chainID) values (?,?,?,?,?)");
+
+            stmt.setString(1, employeeFirstName);
+            stmt.setString(2,employeeLastName);
+//            stmt.setString(1, getGenerateEmployeeID(5));
 
 
             if (toChain) {
                 stmt.setBoolean(3, true);
-                stmt.setInt(4, 99);
+                stmt.setNull(4, Types.INTEGER);
 
                 chainAndMall.viewAllChains();
                 System.out.println("Select a chain from the Available chains:  ");
@@ -50,7 +59,7 @@ public class Employee {
 
 // set chain according to the store selected
 
-                stmt.setInt(5, Integer.valueOf(store.getChainIDfromStore(selectedValue)));
+                stmt.setNull(5, Types.INTEGER);
             }
 
 
@@ -60,60 +69,46 @@ public class Employee {
             } else {
                 System.out.println("number of inserted records:  " + result);
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
     }
 
 
-    private String getGenerateEmployeeID(int count) {
+//    private String getGenerateEmployeeID(int count) {
+//
+//
+//        final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//        StringBuilder builder = new StringBuilder();
+//
+//        while (count-- != 0) {
+//
+//            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
+//
+//            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+//
+//        }
+//
+//        return builder.toString();
+//    }
 
 
-        final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder builder = new StringBuilder();
-
-        while (count-- != 0) {
-
-            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
-
-            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
-
-        }
-
-        return builder.toString();
-    }
-
-
-    public void presentAllEmployeesOfChain() {
+    public void presentAllEmployeesOfChain() throws SQLException {
         int selectedValue = 0;
-            try (Connection conn = controller.getConnectionToDB();PreparedStatement stmt = conn.prepareStatement("SELECT first_name,last_name FROM stores.employees WHERE chainID=?;");
-        ) {
-
-
+            PreparedStatement stmt = connection.prepareStatement("SELECT first_name,last_name FROM employees WHERE chainID=?");
             chainAndMall.viewAllChains();
             System.out.println("Select a chain from the Available chains:  ");
             selectedValue = controller.selectFromScanner();
             stmt.setInt(1, selectedValue);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    System.out.println("Displayed Employees  :  ");
-
-                    while (rs.next()) {
-                        System.out.print("employee first name : " + rs.getString(1));
-                        System.out.println("  employee last name : " + rs.getString(2));
-
-                    }
+                ResultSet rs = stmt.executeQuery();
+                if (!rs.next()){
+                    view.printMessage("No employees were found");
+                    return;
+                }else{
+                    view.printMessage("Displayed Employees  :  ");
+                    view.printMessage(rs.getString(1)+" " + rs.getString(2));
                 }
 
-
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
+                    while (rs.next()) {
+                        view.printMessage(rs.getString(1)+" " + rs.getString(2));
+                    }
     }
 }
 
