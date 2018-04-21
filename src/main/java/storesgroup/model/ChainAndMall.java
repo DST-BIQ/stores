@@ -12,7 +12,7 @@ public class ChainAndMall {
 
     public void createChain(String chainName) {
         try (Connection conn = controller.getConnectionToDB();
-             PreparedStatement stmt = conn.prepareStatement("insert into `excercise_biq`.`chain` (Name) values (?);");
+             PreparedStatement stmt = conn.prepareStatement("insert into chain (Name) values (?)")
         ) {
             stmt.setString(1, chainName);
             int result = stmt.executeUpdate();
@@ -31,7 +31,7 @@ public class ChainAndMall {
     public void viewAllChains() {
 
         try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select idChain as ID,Name as Name from chain;")
+             ResultSet rs = stmt.executeQuery("Select idchain as ID,name as Name from chain;")
         ) {
             System.out.println("Displayed chains  :  ");
 
