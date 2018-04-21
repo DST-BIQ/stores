@@ -8,20 +8,21 @@ import java.sql.SQLException;
 
 public class StoresGroupConsoleApplication {
     //TODO ALL - unit tests, documentation
-// TODO tal - upload DB scheme
+
 
     public static void main(String[] args) {
 
+        StoresGroupConsoleApplication app = new StoresGroupConsoleApplication();
 
         try {
-            consoleApplication();
+            app.consoleApplication();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void consoleApplication() throws SQLException {
-View view = new View();
+    public  void consoleApplication() throws SQLException {
+        View view = new View();
         Controller controller = new Controller();
         ChainAndMall chainAndMall = new ChainAndMall();
         Employee employee = new Employee();
@@ -64,7 +65,7 @@ View view = new View();
                     valueForInput = controller.getStringFromScanner();
                     printMessageToConsole("Presenting all details of a shop:   " + valueForInput);
 
-                    store.presentStoreDetails(valueForInput);
+                    store.presentStoreDetails(Integer.valueOf(valueForInput));
 //TODO DORIT
                     break;
 
@@ -73,11 +74,12 @@ View view = new View();
                     break;
 
                 case 7:
-                    //TODO TAL
+                    store.presentStoreDetails(5);
                     break;
 
-                case 999:
-                    //TODO TAL
+                default:
+                    System.out.println("Thank you and good bye..");
+                    return;
 
             }
 
@@ -86,7 +88,7 @@ View view = new View();
 
     }
 
-    private static void printMessageToConsole(String message) {
+    private  void printMessageToConsole(String message) {
         System.out.println(message);
     }
 }
