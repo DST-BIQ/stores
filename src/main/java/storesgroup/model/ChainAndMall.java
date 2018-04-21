@@ -73,8 +73,6 @@ public class ChainAndMall {
 
             if (rs.next()) {
                 return rs.getInt(1);
-//                System.out.print("Chain ID : " + rs.getString(1));
-//                System.out.println("   Chain Name : " + rs.getString(2));
 
             }
 

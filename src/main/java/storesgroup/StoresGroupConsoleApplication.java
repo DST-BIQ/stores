@@ -21,7 +21,7 @@ public class StoresGroupConsoleApplication {
     }
 
     public static void consoleApplication() throws SQLException {
-View view = new View();
+        View view = new View();
         Controller controller = new Controller();
         ChainAndMall chainAndMall = new ChainAndMall();
         Employee employee = new Employee();
@@ -46,7 +46,7 @@ View view = new View();
                     intValueForInput = controller.selectFromScanner();
                     printMessageToConsole("enter store name");
                     valueForInput = controller.getStringFromScanner();
-                    store.addStoreToChain(valueForInput,intValueForInput);
+                    store.addStoreToChain(valueForInput, intValueForInput);
 
                     break;
                 case 3:
@@ -58,7 +58,7 @@ View view = new View();
                     intValueForInput = controller.selectFromScanner();
                     printMessageToConsole("enter employee name");
                     valueForInput = controller.getStringFromScanner();
-                    employee.addEmployeeToChain(valueForInput,intValueForInput,valueForInput,valueForInput);
+                    employee.addEmployeeToChain(valueForInput, intValueForInput, valueForInput, valueForInput);
 //                    employee.addEmployee(valueForInput, true);
                     break;
 
@@ -68,24 +68,28 @@ View view = new View();
                     intValueForInput = controller.selectFromScanner();
                     printMessageToConsole("enter employee name");
                     valueForInput = controller.getStringFromScanner();
-                    employee.addEmployeeToStore(valueForInput,intValueForInput,valueForInput,valueForInput);
+                    employee.addEmployeeToStore(valueForInput, intValueForInput, valueForInput, valueForInput);
 
 
                     break;
 //DONE
                 case 5:
 // Present all details of a Shop
-                    valueForInput = controller.getStringFromScanner();
-                    printMessageToConsole("Presenting all details of a shop:   " + valueForInput);
+                    printMessageToConsole("Select a store ID to presnt it's details:   ");
+                    store.viewAllStores();
+                    intValueForInput = controller.selectFromScanner();
+                    printMessageToConsole("Presenting all details of a shop:   " + intValueForInput);
 
-                    store.presentStoreDetails(valueForInput);
-//TODO DORIT
+                    store.presentAllDetailsOfAStore(intValueForInput);
                     break;
-
+//TODO whay print is not successfull dorit
                 case 6:
 
 //Present all Employees of a certain Chain
-                    employee.presentAllEmployeesOfChain();
+                    printMessageToConsole("Please select a chain (ID) to display all of it's employees");
+                    chainAndMall.viewAllChains();
+                    intValueForInput = controller.selectFromScanner();
+                    employee.presentAllEmployeesOfChain(intValueForInput);
 
 //DONE
                     break;

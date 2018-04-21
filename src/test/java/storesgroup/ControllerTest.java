@@ -16,9 +16,6 @@ class ControllerTest {
         String fieldValue = "testDelete";
 
                 controller.insertIntoDatabase(tableName,field,fieldValue);
-//                controller.selectFromDatabase(tableName,"name="+fieldValue,"idchain");
-
-
                 assertTrue(controller.deleteFromDatabase(tableName,"idchain = "+controller.selectFromDatabase(tableName,"name=\""+fieldValue+"\"","idchain")));
 
 

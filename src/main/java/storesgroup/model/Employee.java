@@ -31,7 +31,6 @@ public class Employee {
             stmt.setString(6, fname);
 
 
-
             stmt.setInt(4, chainID);
             int result = stmt.executeUpdate();
             if (result == 0) {
@@ -78,7 +77,6 @@ public class Employee {
     }
 
 
-
     int getGenerateEmployeeID(int count) {
 
 
@@ -89,22 +87,31 @@ public class Employee {
     }
 
 
-    public void presentAllEmployeesOfChain() {
-        int selectedValue;
-        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("SELECT first_name,last_name FROM stores.employees WHERE chainID=?;");
+    public void presentAllEmployeesOfChain(int chainID) {
+        Store store = new Store();
+        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM stores.employees WHERE chainID=?;")
         ) {
 
 
-            chainAndMall.viewAllChains();
-            System.out.println("Select a chain from the Available chains:  ");
-            selectedValue = controller.selectFromScanner();
-            stmt.setInt(1, selectedValue);
+            stmt.setInt(1, chainID);
             try (ResultSet rs = stmt.executeQuery()) {
-                System.out.println("Displayed Employees  :  ");
+                System.out.println("Displayed Employees:");
+
+                System.out.println("ID | First Name | LastName | Fname | BirthDate | IsManager | Store");
 
                 while (rs.next()) {
-                    System.out.print("employee first name : " + rs.getString(1));
-                    System.out.println("  employee last name : " + rs.getString(2));
+                    //select id,first_name,last_name,fname,dateofbirth,isManager,storeID from employees where chainID=10025;
+                    System.out.print(rs.getInt(1)+"|");
+                    System.out.print(rs.getString(2)+"|");
+                    System.out.print(rs.getString(3)+"|");
+                    System.out.print(rs.getString(4)+"|");
+                    System.out.print(rs.getString(5)+"|");
+
+                    System.out.print(rs.getBoolean(6)+"|");
+                    int storeID = rs.getInt(7);
+                    System.out.println(controller.selectFromDatabase("stores","idStore ="+storeID+"\"","store_name")+"|");
+
+
 
                 }
             }
