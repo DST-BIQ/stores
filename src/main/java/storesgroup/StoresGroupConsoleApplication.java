@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class StoresGroupConsoleApplication {
     //TODO ALL - unit tests, documentation
-// TODO tal - upload DB scheme
+
 
     public static void main(String[] args) {
 
@@ -29,7 +29,8 @@ View view = new View();
         int selection = 0;
         while (selection != 999) {
             view.printMenu();
-            String valueForInput = null;
+            String valueForInput;
+            int intValueForInput;
             selection = controller.selectFromScanner();
             switch (selection) {
 
@@ -37,28 +38,39 @@ View view = new View();
                     // create new chain
                     printMessageToConsole("please enter a name for the new chain");
                     chainAndMall.createChain(controller.getStringFromScanner());
-
-//TODO DORIT
                     break;
                 case 2:
 // add store to chain
+                    printMessageToConsole("please select the chain desired (type in the id displayed below):");
+                    chainAndMall.viewAllChains();
+                    intValueForInput = controller.selectFromScanner();
                     printMessageToConsole("enter store name");
                     valueForInput = controller.getStringFromScanner();
-                    store.addStoreToChain(valueForInput);
-//DONE
+                    store.addStoreToChain(valueForInput,intValueForInput);
+
                     break;
                 case 3:
+
+
 // add employee to chain
+                    printMessageToConsole("please select the chain desired (type in the id displayed below):");
+                    chainAndMall.viewAllChains();
+                    intValueForInput = controller.selectFromScanner();
                     printMessageToConsole("enter employee name");
                     valueForInput = controller.getStringFromScanner();
-                    employee.addEmployee(valueForInput, true);
+                    employee.addEmployeeToChain(valueForInput,intValueForInput,valueForInput,valueForInput);
+//                    employee.addEmployee(valueForInput, true);
                     break;
-//DONE
-                case 4:
+
+                case 4:// add employee to store
+                    printMessageToConsole("please select the store desired (type in the id displayed below):");
+                    store.viewAllStores();
+                    intValueForInput = controller.selectFromScanner();
                     printMessageToConsole("enter employee name");
                     valueForInput = controller.getStringFromScanner();
-                    employee.addEmployee(valueForInput, false);
-// add employee to store
+                    employee.addEmployeeToStore(valueForInput,intValueForInput,valueForInput,valueForInput);
+
+
                     break;
 //DONE
                 case 5:
