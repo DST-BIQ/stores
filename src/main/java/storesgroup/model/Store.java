@@ -14,26 +14,27 @@ public class Store {
 
 
 
-    public String getChainIDfromStore(int selectedValue) {
+    public int getChainIDfromStore(int selectedValue) {
         try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT chainID from store where idStore=" + selectedValue + ";")) {
+             ResultSet rs = stmt.executeQuery("SELECT chain from stores where id=" + selectedValue + ";")) {
 
             while (rs.next()) {
 
-                return rs.getString(1);
+//                return rs.getString(1);
+                return rs.getInt(1);
             }
 
 
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
-        return null;
+        return -1;
     }
 
     public void viewAllStores() {
 
         try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select idStore as ID,Name as Name from store;")
+             ResultSet rs = stmt.executeQuery("Select id as ID,store_name as Name from stores;")
         ) {
             System.out.println("Displayed Stores  :  ");
 
@@ -59,7 +60,7 @@ public class Store {
     public void presentStoreDetails(String storeName) throws SQLException {
 
         try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT name FROM excercise_biq.store WHERE ShoppingMallStore=1")) {
+                 ResultSet rs = stmt.executeQuery("SELECT name FROM store.stores WHERE ShoppingMallStore=1")) {
 
                 while (rs.next()) {
                     System.out.print("ID : " + rs.getString(1)+",");
@@ -77,16 +78,11 @@ public class Store {
             }
     }
 
-    public void addStoreToChain(String storeName) throws SQLException {
-        int selectedValue = 0;
+    public void addStoreToChain(String storeName,int chainID) throws SQLException {
         try (Connection conn = controller.getConnectionToDB();PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`stores` (store_name,chain) values (?,?);");
         ) {
             stmt.setString(1, storeName);
-
-                chainAndMall.viewAllChains();
-                System.out.println("Select a chain from the Available chains:  ");
-                selectedValue = controller.selectFromScanner();
-                stmt.setInt(2, selectedValue);
+                stmt.setInt(2, chainID);
 
 
             int result = stmt.executeUpdate();
