@@ -59,24 +59,24 @@ public class Store {
 
 
 
-    public void presentStoreDetails(String storeName) throws SQLException {
+    public void presentStoreDetails(int storeId) throws SQLException {
 
         try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT name FROM excercise_biq.store WHERE ShoppingMallStore=1")) {
+                 ResultSet rs = stmt.executeQuery("SELECT store_name,stores.chain, stores.cityId, stores.StreetAddress, stores.mallId, chain.name, cities.name, shoppingmalls.name  FROM stores, chain, cities, shoppingmalls WHERE stores.id=" + storeId + " AND " +
+                         "stores.chain = chain.idchain AND stores.cityId = cities.id AND stores.mallId = shoppingmalls.id" )) {
 
                 while (rs.next()) {
-                    System.out.print("ID : " + rs.getString(1)+",");
                     System.out.println("name : " + rs.getString(2));
-                    System.out.println("chain ID : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
-                    System.out.println("Store name : " + rs.getString(2));
+                    System.out.println("chain : " + rs.getString(6));
+                    System.out.println("City : " + rs.getString(7));
+                    System.out.println("Street Address : " + rs.getString(4));
+                    System.out.println("Mall : " + rs.getString(8));
+
 
 
                 }
             } catch (SQLException e) {
-                // TODO
+            System.out.println("An error has occurred: "+e.getMessage());
             }
     }
 
