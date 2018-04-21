@@ -2,16 +2,24 @@ package storesgroup.model;
 
 import org.junit.jupiter.api.Test;
 import storesgroup.Controller;
+import storesgroup.View;
+
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class ChainAndMallTest {
-Controller controller = new Controller();
-ChainAndMall chainAndMall = new ChainAndMall();
 
-@Test
-    public void addChainPositive(){
+    View view = new View();
+    Controller controller = new Controller();
+    ChainAndMall chainAndMall = new ChainAndMall(view,controller);
+
+    ChainAndMallTest() throws SQLException {
+    }
+
+    @Test
+    public void addChainPositive() throws SQLException {
         String chainName="test";
 
         if(controller.selectFromDatabase("chain","Name=\""+chainName+"\"","idChain")!=null){
