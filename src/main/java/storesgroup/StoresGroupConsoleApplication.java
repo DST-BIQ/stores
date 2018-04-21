@@ -38,13 +38,15 @@ public class StoresGroupConsoleApplication {
                     // create new chain
                     printMessageToConsole("please enter a name for the new chain");
                     chainAndMall.createChain(controller.getStringFromScanner());
+
 //TODO DORIT
                     break;
                 case 2:
 // add store to chain
                     printMessageToConsole("enter store name");
                     valueForInput = controller.getStringFromScanner();
-//TODO STAV
+                    store.addStoreToChain(valueForInput);
+//DONE
                     break;
                 case 3:
 // add employee to chain
@@ -70,7 +72,11 @@ public class StoresGroupConsoleApplication {
                     break;
 
                 case 6:
-                    //TODO STAV
+
+//Present all Employees of a certain Chain
+                    employee.presentAllEmployeesOfChain();
+
+//DONE
                     break;
 
                 case 7:
@@ -88,7 +94,7 @@ public class StoresGroupConsoleApplication {
 
     }
 
-    private  void printMessageToConsole(String message) {
+    public  void printMessageToConsole(String message) {
         System.out.println(message);
     }
 }

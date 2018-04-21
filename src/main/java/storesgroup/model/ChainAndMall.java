@@ -4,12 +4,17 @@ import storesgroup.Controller;
 
 import java.sql.*;
 
+import static storesgroup.StoresGroupConsoleApplication.printMessageToConsole;
+
 public class ChainAndMall {
 
 
     Controller controller = new Controller();
 
-
+    /**
+     * create new chain of stores to the database.
+     * @param chainName - String icludes the chain nmae
+     */
     public void createChain(String chainName) {
         try (Connection conn = controller.getConnectionToDB();
              PreparedStatement stmt = conn.prepareStatement("insert into chain (Name) values (?)")
@@ -17,15 +22,16 @@ public class ChainAndMall {
             stmt.setString(1, chainName);
             int result = stmt.executeUpdate();
             if (result == 0) {
-                System.out.println("no updates were done");
-            } else {
-                System.out.println("number of inserted records:  " + result);
+                printMessageToConsole("no updates were done");
+                } else {
+                printMessageToConsole("New chain was inserted to DB  " + chainName);
             }
 
 
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
+
     }
 
     public void viewAllChains() {

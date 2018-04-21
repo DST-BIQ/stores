@@ -2,16 +2,13 @@ package storesgroup.model;
 
 import storesgroup.Controller;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Store {
 
 
     Controller controller = new Controller();
-
+    ChainAndMall chainAndMall = new ChainAndMall();
 
 
 
@@ -80,7 +77,33 @@ public class Store {
             }
     }
 
-}
+    public void addStoreToChain(String storeName) throws SQLException {
+        int selectedValue = 0;
+        try (Connection conn = controller.getConnectionToDB();PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`stores` (store_name,chain) values (?,?);");
+        ) {
+            stmt.setString(1, storeName);
+
+                chainAndMall.viewAllChains();
+                System.out.println("Select a chain from the Available chains:  ");
+                selectedValue = controller.selectFromScanner();
+                stmt.setInt(2, selectedValue);
+
+
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                System.out.println("no updates were done");
+            } else {
+                System.out.println("number of inserted records:  " + result);
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+
+    }
+    }
+
 
 
 
