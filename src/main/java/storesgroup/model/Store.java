@@ -56,6 +56,12 @@ public class Store {
             }
 
     }
+
+    /**
+     * present all store details. input store ID
+     * @param storeId - store ID
+     * @throws SQLException
+     */
     public void presentStoreDetails(int storeId) throws SQLException {
 
 
@@ -77,6 +83,12 @@ public class Store {
 
     }
 
+
+    /**
+     * present all stores in a store group
+     * @param mallGroupId
+     * @throws SQLException
+     */
     public void presentStoreInMallGroup(int mallGroupId) throws SQLException {
 
 
