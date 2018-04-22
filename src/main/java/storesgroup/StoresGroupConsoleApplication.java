@@ -36,7 +36,7 @@ public class StoresGroupConsoleApplication {
             String valueForInput;
             selection = controller.getIntFromScanner();
             switch (selection) {
-
+//TODO - divide to sub methods
                 case 1:
                     // create new chain
                     view.printMessage("please enter a name for the new chain");
