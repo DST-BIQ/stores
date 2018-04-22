@@ -105,6 +105,8 @@ public class StoresGroupConsoleApplication {
 
                 case 8:
 //Present store details
+                    view.printMessage("Please enter a store id from the list bellow:");
+                    store.viewAllStores();
                     view.printMessage("Please enter store ID");
                     store.presentStoreDetails(controller.getIntFromScanner());
                     break;

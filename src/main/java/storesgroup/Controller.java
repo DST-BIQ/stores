@@ -16,7 +16,7 @@ public class Controller {
     private Connection conn = null;
     static final String USER = "root";
     static final String PASS = "root";
-    static final String DB_NAME = "stores"; //TODO properties per user for all configurable issues.
+    static final String DB_NAME = "stores_group"; //TODO properties per user for all configurable issues.
 
     Scanner scanner;
     View view;
