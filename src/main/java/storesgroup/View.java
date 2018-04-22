@@ -13,7 +13,7 @@ public class View {
         System.out.println("3. Add employee to chain");  // exist employee type name if exists and not chain update, if not exists insert
         System.out.println("4. Add employee to Store");  // exist employee type name if exists and not chain update, if not exists insert
         System.out.println("5. Present all shops of a certain shopping mall");
-        System.out.println("6. Present all shops of a certain shopping mall group");//TODO
+        System.out.println("6. Present all shops of a certain shopping mall group");
         System.out.println("7. Present all Employees of a certain Chain");
         System.out.println("8. Present store details");
         System.out.println("Any other number to exit...");

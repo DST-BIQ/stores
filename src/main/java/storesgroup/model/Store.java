@@ -122,7 +122,7 @@ public class Store {
 
 
     public void addStoreToChain(String storeName, int storeId) throws SQLException {
-        int selectedValue = 0;
+
         PreparedStatement stmt = connection.prepareStatement("insert into `stores` (store_name,chain) values (?,?);");
         stmt.setString(1, storeName);
         view.printMessage("Select a chain from the Available chains:  ");
