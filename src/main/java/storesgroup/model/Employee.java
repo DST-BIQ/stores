@@ -79,7 +79,7 @@ public class Employee {
               view.printMessage("\tID \t First Name \t LastName \t Fname \t BirthDate t\tIsManager ");
 
               while (rs.next()) {
-                    //select id,first_name,last_name,fname,dateofbirth,isManager,storeID from employees where chainID=10025;
+
                     view.printMessage("\t"+rs.getInt(1)+"\t" + rs.getString(2)+"\t" + rs.getString(3)+"\t"+rs.getString(4)+"\t"+ rs.getString(5)+"\t"+rs.getString(6)+"");
                 }
             }
