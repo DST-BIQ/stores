@@ -1,7 +1,5 @@
 package storesgroup;
 
-import storesgroup.model.Store;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -30,7 +28,7 @@ public class View {
         System.out.println(message);
     }
 
-    public void printRecord(ResultSet rs, Store store) throws SQLException {
+    public void printRecord(ResultSet rs) throws SQLException {
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
             if (rs.getString(i) != null) {
                 printMessage(rs.getMetaData().getColumnLabel(i) + ": " + rs.getString(i));

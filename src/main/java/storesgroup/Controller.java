@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static storesgroup.StoresGroupConsoleApplication.printMessageToConsole;
+
 
 public class Controller {
     private MysqlDataSource ds = new MysqlDataSource();
@@ -17,9 +17,11 @@ public class Controller {
     static final String DB_NAME = "stores_group";
 
     Scanner scanner;
+    View view;
 
 
-    public Controller() {
+    public Controller(View view) {
+        this.view =view;
         try {
             getConnectionToDB();
         } catch (SQLException e) {
@@ -88,22 +90,17 @@ public class Controller {
      * @param selectCondition = WHERE part of select
      * @param selection       - SELECT part of query
      */
-    public String selectFromDatabase(String tableName, String selectCondition, String selection) {
-        Controller controller = new Controller();
+    public String selectFromDatabase(String tableName, String selectCondition, String selection) throws SQLException {
 
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select " + selection + " from " + tableName + " where " + selectCondition + ";")
-        ) {
+
+        Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("Select " + selection + " from " + tableName + " where " + selectCondition + ";");
+
             if (rs.next()) {
                 System.out.println("this is the resource name answer   " + rs.getString(1));
                 return rs.getString(1);
 
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
 
         return null;
     }
@@ -114,26 +111,19 @@ public class Controller {
      * @param deleteCondition = WHERE part of select
      * @return true/false
      */
-    public boolean deleteFromDatabase(String tableName, String deleteCondition) {
-        Controller controller = new Controller();
-String sql = "delete from "+tableName+" where "+deleteCondition+";";
-        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement(sql)
-        ) {
+    public boolean deleteFromDatabase(String tableName, String deleteCondition) throws SQLException {
 
-            int result = stmt.executeUpdate();
-            if (result == 0) {
-                printMessageToConsole("no updates were done");
+        String sql = "delete from "+tableName+" where "+deleteCondition;
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         int result = stmt.executeUpdate();
+         if (result == 0) {
+                view.printMessage("no updates were done");
                 return false;
             } else {
-                printMessageToConsole("deleted successfully from:  "+tableName+ ":  " + deleteCondition );
+                view.printMessage("deleted successfully from:  "+tableName+ ":  " + deleteCondition );
                 return true;
             }
 
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
-        return false;
     }
 
 
@@ -144,28 +134,20 @@ String sql = "delete from "+tableName+" where "+deleteCondition+";";
      * @param fieldValue = list of value(s) matching the fields
      ** @return true/false
      */
-    public boolean insertIntoDatabase(String tableName, String field,String fieldValue) {
-        Controller controller = new Controller();
-
-
+    public boolean insertIntoDatabase(String tableName, String field,String fieldValue) throws SQLException {
         String sql = "insert into "+tableName+" ("+field+")";
-        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement(sql+" values (?);");
-        ) {
+        PreparedStatement stmt = conn.prepareStatement(sql+" values (?);");
+
             stmt.setString(1, fieldValue);
 
             int result = stmt.executeUpdate();
             if (result == 0) {
-                printMessageToConsole("no updates were done");
+                view.printMessage("no updates were done");
                 return false;
             } else {
-                printMessageToConsole("inserted successfully to:  "+tableName+ ":  " + field );
+                view.printMessage("inserted successfully to:  "+tableName+ ":  " + field );
                 return true;
             }
 
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
-        return false;
     }
 }

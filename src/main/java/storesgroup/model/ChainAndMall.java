@@ -10,12 +10,12 @@ public class ChainAndMall {
 
     Controller controller;
     View view;
-    Connection conn;
+    Connection connection;
 
     public ChainAndMall(View view, Controller controller) throws SQLException {
         this.view = view;
         this.controller = controller;
-        conn = controller.getConnectionToDB();
+        connection = controller.getConnectionToDB();
     }
 
     /**
@@ -24,9 +24,7 @@ public class ChainAndMall {
      * @param chainName - String icludes the chain nmae
      */
     public void createChain(String chainName) throws SQLException {
-        View view = new View();
-
-            PreparedStatement stmt = conn.prepareStatement("insert into chain (Name) values (?)");
+            PreparedStatement stmt = connection.prepareStatement("insert into chain (Name) values (?)");
             stmt.setString(1, chainName);
             int result = stmt.executeUpdate();
             if (result == 0) {
@@ -36,26 +34,20 @@ public class ChainAndMall {
             }
     }
 
-    public void viewAllChains() {
+    public void viewAllChains() throws SQLException {
 
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("Select idchain as ID,name as Name from chain;")
-        ) {
-            System.out.println("Displayed chains  :  ");
+         Statement stmt = connection.createStatement();
+         ResultSet rs = stmt.executeQuery("Select idchain as ID,name as Name from chain;");
+         view.printMessage("Displayed chains  :  ");
 
             while (rs.next()) {
                 view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
     }
 
     public void viewAllMalls() throws SQLException {
 
-         Statement stmt = conn.createStatement();
+         Statement stmt = connection.createStatement();
          ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from shoppingmalls;");
          view.printMessage("Displayed malls  :  ");
 
@@ -63,30 +55,29 @@ public class ChainAndMall {
                 view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
             }
     }
+    public void viewAllMallGroups() throws SQLException {
 
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from mallgroups;");
+        view.printMessage("Displayed mall groups  :  ");
 
-    public int getChainID(String chainName) {
+        while (rs.next()) {
+            view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
+        }
+    }
+
+    public int getChainID(String chainName) throws SQLException {
 
         String sql = "Select idchain as ID,name as Name from chain where name = \"" + chainName + "\"";
-
-
-        try (Connection conn = controller.getConnectionToDB(); Statement stmt = conn.createStatement();
-
-             ResultSet rs = stmt.executeQuery(sql)
-        ) {
-            System.out.println("Displayed chains  :  ");
-
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        view.printMessage("Displayed chains  :  ");
             if (rs.next()) {
                 return rs.getInt(1);
-
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-        return -1;
+            return -1;
     }
+
 }
 
 

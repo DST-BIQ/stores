@@ -21,15 +21,26 @@ public class Store {
         connection = controller.getConnectionToDB();
     }
 
-    public String getChainIDfromStore(int selectedValue) throws SQLException {
+    public int getChainIDfromStore(int selectedValue) throws SQLException {
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT chainID from store where idStore=" + selectedValue);
 
             while (rs.next()) {
 
-                return rs.getString(1);
+                return rs.getInt(1);
             }
-        return null;
+        return 0;
+    }
+
+    public int getStoreID(String selectedValue) throws SQLException {
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT id from stores where store_name='" + selectedValue+"'");
+
+        while (rs.next()) {
+
+            return rs.getInt(1);
+        }
+        return -1;
     }
 
     public void viewAllStores() throws SQLException {
@@ -45,12 +56,6 @@ public class Store {
             }
 
     }
-
-
-
-
-
-
     public void presentStoreDetails(int storeId) throws SQLException {
 
 
@@ -66,12 +71,33 @@ public class Store {
                     return;
                 }else {
 
-                 view.printRecord(rs, this);
+                 view.printRecord(rs);
                  view.printMessage("");
                 }
 
     }
 
+    public void presentStoreInMallGroup(int mallGroupId) throws SQLException {
+
+
+        PreparedStatement stmt = connection.prepareStatement("SELECT stores.id AS 'ID', store_name AS 'Store Name' FROM stores\n" +
+                "LEFT JOIN shoppingmalls ON stores.mallId = shoppingmalls.id\n" +
+                "WHERE shoppingmalls.mallGroupId=?" );
+        stmt.setInt(1,mallGroupId);
+        ResultSet rs = stmt.executeQuery();
+        if (!rs.next()){
+            view.printMessage("No store with the requested Mall GroupID was found");
+            return;
+        }else {
+            view.printMessage("Found stores:");
+            view.printRecord(rs);
+            while (rs.next()) {
+                view.printRecord(rs);
+            }
+            view.printMessage("");
+        }
+
+    }
     public void presentStoresInMall(int mallId) throws SQLException {
 
 
@@ -83,39 +109,30 @@ public class Store {
                 return;
             }else{
                 view.printMessage("Stores in selected mall are:");
-                view.printRecord(rs, this);
+                view.printRecord(rs);
             }
 
                 while (rs.next()) {
-                    view.printRecord(rs, this);
+                    view.printRecord(rs);
                 }
                 view.printMessage("");
 
     }
 
-    public void addStoreToChain(String storeName)  {
+
+
+    public void addStoreToChain(String storeName, int storeId) throws SQLException {
         int selectedValue = 0;
-        try (Connection conn = controller.getConnectionToDB();
-             PreparedStatement stmt = conn.prepareStatement("insert into `stores` (store_name,chain) values (?,?);")
-        ) {
-            stmt.setString(1, storeName);
-
-                chainAndMall.viewAllChains();
-                view.printMessage("Select a chain from the Available chains:  ");
-                selectedValue = controller.selectFromScanner();
-                stmt.setInt(2, selectedValue);
-            int result = stmt.executeUpdate();
-            if (result == 0) {
-                view.printMessage("no updates were done");
-            } else {
-                view.printMessage("Store was added successfully");
-            }
-
-
-        } catch (SQLException e) {
-            view.printMessage(""+e.getErrorCode());
+        PreparedStatement stmt = connection.prepareStatement("insert into `stores` (store_name,chain) values (?,?);");
+        stmt.setString(1, storeName);
+        view.printMessage("Select a chain from the Available chains:  ");
+        stmt.setInt(2, storeId);
+        int result = stmt.executeUpdate();
+        if (result == 0) {
+          view.printMessage("no updates were done");
+        } else {
+          view.printMessage("Store was added successfully");
         }
-
      }
     }
 

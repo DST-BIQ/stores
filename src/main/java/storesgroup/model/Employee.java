@@ -1,16 +1,28 @@
 package storesgroup.model;
 
 import storesgroup.Controller;
+import storesgroup.View;
 
-import java.sql.*;
-import java.util.Random;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Employee {
 
-    Controller controller = new Controller();
+    Controller controller;
+    View view;
+    ChainAndMall chainAndMall;
+    Store store;
+    Connection connection;
 
-    ChainAndMall chainAndMall = new ChainAndMall();
-    Store store = new Store();
+    public Employee(View view, Controller controller) throws SQLException {
+        this.view =view;
+        this.controller = controller;
+        this.store = new Store(view,controller);
+        this.chainAndMall = new ChainAndMall(view, controller);
+        connection =  controller.getConnectionToDB();
+    }
 
     /**
      * add employee to chain
@@ -19,111 +31,59 @@ public class Employee {
      * @param chainID   - selected chain ID
      */
     public void addEmployeeToChain(String firstName,
-                                   int chainID, String lastName, String fname) {
-
-        try (Connection conn = controller.getConnectionToDB();
-             PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`employees` (id,first_name,isManager,chainID,last_name,fname) values (?,?,?,?,?,?);")
-        ) {
-            stmt.setInt(1, getGenerateEmployeeID(5));
-            stmt.setString(2, firstName);
-            stmt.setBoolean(3, true);
-            stmt.setString(5, lastName);
-            stmt.setString(6, fname);
+                                   int chainID, String lastName, String fname) throws SQLException {
 
 
-            stmt.setInt(4, chainID);
+             PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,chainID,last_name,fname) values (?,?,?,?,?);");
+
+            stmt.setString(1, firstName);
+            stmt.setBoolean(2, true);
+            stmt.setInt(3, chainID);
+            stmt.setString(4, lastName);
+            stmt.setString(5, fname);
             int result = stmt.executeUpdate();
             if (result == 0) {
                 System.out.println("no updates were done");
             } else {
                 System.out.println("number of inserted records:  " + result);
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
     }
 
     /**
      * add employee to store
      *
-     * @param employeeName - name
+     * @param firstName - name
      * @param storeID      - id of the selected store
      */
-    public void addEmployeeToStore(String employeeName, int storeID, String lastName, String fname) {
-
-
-        try (Connection conn = controller.getConnectionToDB();
-             PreparedStatement stmt = conn.prepareStatement("insert into `stores`.`employees` (id,first_name,isManager,storeID,chainID,last_name,fname) values (?,?,?,?,?,?,?);")
-        ) {
-            stmt.setString(2, employeeName);
-            stmt.setInt(1, getGenerateEmployeeID(5));
-            stmt.setBoolean(3, false);
-            stmt.setInt(4, storeID);
-            stmt.setInt(5, store.getChainIDfromStore(storeID));
-            stmt.setString(6, lastName);
-            stmt.setString(7, fname);
+    public void addEmployeeToStore(String firstName, int storeID, String lastName, String fname) throws SQLException {
+            PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,storeID,last_name,fname) values (?,?,?,?,?);");
+            stmt.setString(1, firstName);
+            stmt.setBoolean(2, false);
+            stmt.setInt(3, storeID);
+            stmt.setString(4, lastName);
+            stmt.setString(5, fname);
             int result = stmt.executeUpdate();
             if (result == 0) {
                 System.out.println("no updates were done");
             } else {
                 System.out.println("number of inserted records:  " + result);
             }
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
     }
 
+    public void presentAllEmployeesOfChain(int chainID) throws SQLException {
 
-    int getGenerateEmployeeID(int count) {
+        PreparedStatement stmt = connection.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM employees WHERE chainID=?;");
+        stmt.setInt(1, chainID);
+        try (ResultSet rs = stmt.executeQuery()) {
+              view.printMessage("Displayed Employees:");
+              view.printMessage("\tID \t First Name \t LastName \t Fname \t BirthDate t\tIsManager ");
 
-
-        Random generator = new Random();
-        int i = generator.nextInt(50000);
-
-        return i;
-    }
-
-
-    public void presentAllEmployeesOfChain(int chainID) {
-        Store store = new Store();
-        try (Connection conn = controller.getConnectionToDB(); PreparedStatement stmt = conn.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM stores.employees WHERE chainID=?;")
-        ) {
-
-
-            stmt.setInt(1, chainID);
-            try (ResultSet rs = stmt.executeQuery()) {
-                System.out.println("Displayed Employees:");
-
-                System.out.println("ID | First Name | LastName | Fname | BirthDate | IsManager | Store");
-
-                while (rs.next()) {
+              while (rs.next()) {
                     //select id,first_name,last_name,fname,dateofbirth,isManager,storeID from employees where chainID=10025;
-                    System.out.print(rs.getInt(1)+"|");
-                    System.out.print(rs.getString(2)+"|");
-                    System.out.print(rs.getString(3)+"|");
-                    System.out.print(rs.getString(4)+"|");
-                    System.out.print(rs.getString(5)+"|");
-
-                    System.out.print(rs.getBoolean(6)+"|");
-                    int storeID = rs.getInt(7);
-                    System.out.println(controller.selectFromDatabase("stores","idStore ="+storeID+"\"","store_name")+"|");
-
-
-
+                    view.printMessage("\t"+rs.getInt(1)+"\t" + rs.getString(2)+"\t" + rs.getString(3)+"\t"+rs.getString(4)+"\t"+ rs.getString(5)+"\t"+rs.getString(6)+"");
                 }
             }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        }
-
     }
-
-
 }
 
 
