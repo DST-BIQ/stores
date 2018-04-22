@@ -1,4 +1,4 @@
 package storesgroup;
 
-public class ViewTest {
+public class ViewTest {//TODO
 }
