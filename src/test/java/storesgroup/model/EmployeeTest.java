@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import storesgroup.Controller;
+import storesgroup.View;
 
 import java.sql.SQLException;
 
@@ -11,11 +12,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class EmployeeTest {
+    //TODO - add tests for 'employeePresent' methods
 
-    Employee employee = new Employee();
-    Store store = new Store();
-    Controller controller = new Controller();
-    ChainAndMall chain = new ChainAndMall();
+    View view = new View();
+    Controller controller = new Controller(view);
+    Employee employee = new Employee(view,controller);
+    Store store = new Store(view,controller);
+    ChainAndMall chain = new ChainAndMall(view,controller);
+
+    EmployeeTest() throws SQLException {
+    }
 
 
     @BeforeEach
@@ -26,7 +32,7 @@ class EmployeeTest {
     }
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() throws SQLException {
 
 controller.deleteFromDatabase("employees", "first_name=\"firstNameForTest\"");
 controller.deleteFromDatabase("stores","store_name=\"testPurpose\"");

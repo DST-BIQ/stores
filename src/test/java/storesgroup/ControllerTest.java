@@ -2,14 +2,16 @@ package storesgroup;
 
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ControllerTest {
-
-    Controller controller = new Controller();
+    View view = new View();
+    Controller controller = new Controller(view);
     @Test
 
-    public void deleteFromDatabase(){
+    public void deleteFromDatabase() throws SQLException {
 
         String tableName = "chain";
         String field = "name";

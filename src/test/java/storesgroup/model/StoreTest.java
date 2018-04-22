@@ -7,8 +7,9 @@ import storesgroup.View;
 import java.sql.SQLException;
 
 public class StoreTest {
+    //TODO - add tests for 'storesPresent' methods
     View view = new View();
-    Controller controller = new Controller();
+    Controller controller = new Controller(view);
 
     @Test
     public void presentStoreDetailsTests() throws SQLException {

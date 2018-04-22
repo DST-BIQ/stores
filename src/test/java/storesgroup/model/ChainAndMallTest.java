@@ -12,33 +12,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ChainAndMallTest {
 
     View view = new View();
-    Controller controller = new Controller();
+    Controller controller = new Controller(view);
     ChainAndMall chainAndMall = new ChainAndMall(view,controller);
 
     ChainAndMallTest() throws SQLException {
+        ChainAndMall chainAndMall = new ChainAndMall(view,controller);
     }
-    Controller controller = new Controller();
-    ChainAndMall chainAndMall = new ChainAndMall();
 
     @Test
     public void addChainPositive() throws SQLException {
-        String chainName = "test";
-    }
-    @Test
-    public void addChainPositive() {
-        String chainName = "test";
-
-        if (controller.selectFromDatabase("chain", "name=\"" + chainName + "\"", "idchain") != null) {
-            System.out.println("deleting existing chain from DB");
-            controller.deleteFromDatabase("stores.chain", "test");
-        }
-
+        String chainName = "test" + System.currentTimeMillis();
         chainAndMall.createChain(chainName);
-
-        assertEquals(chainName, controller.selectFromDatabase("chain", "Name=\"" + chainName + "\"", "Name"));
-
-
+        assertEquals(chainName, controller.selectFromDatabase("chain", "name=\"" + chainName + "\"", "Name"));
     }
-
-
 }
