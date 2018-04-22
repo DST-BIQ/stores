@@ -20,7 +20,6 @@ class ControllerTest {
                 controller.insertIntoDatabase(tableName,field,fieldValue);
                 assertTrue(controller.deleteFromDatabase(tableName,"idchain = "+controller.selectFromDatabase(tableName,"name=\""+fieldValue+"\"","idchain")));
 
-
     }
 
 }
