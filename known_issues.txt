@@ -1,0 +1,13 @@
+DST Team stores project known issues:
+
+****** First submission - 22.4.2018 *************
+
+1. Add tests for 'employeePresent' methods
+2. Add tests for 'storesPresent' methods
+3. Add  properties per user for all configurable issues
+4. Change in getIntFromScanner to buffered reader as well. we currently have two methods for reading input. redundant.
+5. Error handling - print errors returnd from JDBC
+6. Future dev - create View interface for cross platform support
+7. Should add ability to insert City and Street address on adding a store
+
+*************************************************
