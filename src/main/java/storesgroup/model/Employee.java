@@ -17,11 +17,11 @@ public class Employee {
     Connection connection;
 
     public Employee(View view, Controller controller) throws SQLException {
-        this.view =view;
+        this.view = view;
         this.controller = controller;
-        this.store = new Store(view,controller);
+        this.store = new Store(view, controller);
         this.chainAndMall = new ChainAndMall(view, controller);
-        connection =  controller.getConnectionToDB();
+        connection = controller.getConnectionToDB();
     }
 
     /**
@@ -32,42 +32,76 @@ public class Employee {
      */
     public void addEmployeeToChain(String firstName,
                                    int chainID, String lastName, String fname) throws SQLException {
+        int internalChainID = chainID;
+
+        PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,ChainID,last_name,fname) values (?,?,?,?,?);");
+
+        stmt.setString(1, firstName);
+        stmt.setBoolean(2, true);
+        stmt.setString(4, lastName);
+        stmt.setString(5, fname);
+        int result = 0;
+        while (result == 0) {
+            try {
+                stmt.setInt(3, internalChainID);
+                result = stmt.executeUpdate();
+            } catch (SQLException e) {
+                view.printMessage("Please type in chain ID again. you have probably inserted wrong value");
+                chainAndMall.viewAllChains();
+                internalChainID = controller.getIntFromScanner();
 
 
-             PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,chainID,last_name,fname) values (?,?,?,?,?);");
-
-            stmt.setString(1, firstName);
-            stmt.setBoolean(2, true);
-            stmt.setInt(3, chainID);
-            stmt.setString(4, lastName);
-            stmt.setString(5, fname);
-            int result = stmt.executeUpdate();
-            if (result == 0) {
-                System.out.println("no updates were done");
-            } else {
-                System.out.println("number of inserted records:  " + result);
             }
+
+
+        }
+
+        if (result == 0) {
+            System.out.println("no updates were done");
+        } else {
+            System.out.println("number of inserted records:  " + result);
+        }
     }
 
     /**
      * add employee to store
      *
      * @param firstName - name
-     * @param storeID      - id of the selected store
+     * @param storeID   - id of the selected store
      */
     public void addEmployeeToStore(String firstName, int storeID, String lastName, String fname) throws SQLException {
-            PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,storeID,last_name,fname) values (?,?,?,?,?);");
-            stmt.setString(1, firstName);
-            stmt.setBoolean(2, false);
-            stmt.setInt(3, storeID);
-            stmt.setString(4, lastName);
-            stmt.setString(5, fname);
-            int result = stmt.executeUpdate();
-            if (result == 0) {
-                System.out.println("no updates were done");
-            } else {
-                System.out.println("number of inserted records:  " + result);
+
+        int internalStoreID = storeID;
+        PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,storeID,last_name,fname) values (?,?,?,?,?);");
+        stmt.setString(1, firstName);
+        stmt.setBoolean(2, false);
+
+        stmt.setString(4, lastName);
+        stmt.setString(5, fname);
+
+
+        int result = 0;
+        while (result == 0) {
+            try {
+                stmt.setInt(3, internalStoreID);
+                result = stmt.executeUpdate();
+            } catch (SQLException e) {
+                view.printMessage("Please type in Store ID again. you have probably inserted wrong value");
+                store.viewAllStores();
+                internalStoreID = controller.getIntFromScanner();
+
+
             }
+
+
+        }
+
+
+        if (result == 0) {
+            System.out.println("no updates were done");
+        } else {
+            System.out.println("number of inserted records:  " + result);
+        }
     }
 
     public void presentAllEmployeesOfChain(int chainID) throws SQLException {
@@ -75,14 +109,14 @@ public class Employee {
         PreparedStatement stmt = connection.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM employees WHERE chainID=?;");
         stmt.setInt(1, chainID);
         try (ResultSet rs = stmt.executeQuery()) {
-              view.printMessage("Displayed Employees:");
-              view.printMessage("\tID \t First Name \t LastName \t Fname \t BirthDate t\tIsManager ");
+            view.printMessage("Displayed Employees:");
+            view.printMessage("\tID \t First Name \t LastName \t Fname \t BirthDate t\tIsManager ");
 
-              while (rs.next()) {
+            while (rs.next()) {
 
-                    view.printMessage("\t"+rs.getInt(1)+"\t" + rs.getString(2)+"\t" + rs.getString(3)+"\t"+rs.getString(4)+"\t"+ rs.getString(5)+"\t"+rs.getString(6)+"");
-                }
+                view.printMessage("\t" + rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getString(4) + "\t" + rs.getString(5) + "\t" + rs.getString(6) + "");
             }
+        }
     }
 }
 

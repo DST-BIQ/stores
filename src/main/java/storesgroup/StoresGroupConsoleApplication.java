@@ -13,6 +13,7 @@ public class StoresGroupConsoleApplication {
     Store store;
     View view;
     Controller controller;
+
     public static void main(String[] args) {
 
         StoresGroupConsoleApplication app = new StoresGroupConsoleApplication();
@@ -24,16 +25,16 @@ public class StoresGroupConsoleApplication {
         }
     }
 
-    public  void consoleApplication() throws SQLException {
+    public void consoleApplication() throws SQLException {
         view = new View();
         controller = new Controller(view);
-        chainAndMall = new ChainAndMall(view,controller);
-        employee = new Employee(view,controller);
-        store = new Store(view,controller);
+        chainAndMall = new ChainAndMall(view, controller);
+        employee = new Employee(view, controller);
+        store = new Store(view, controller);
         int selection = 0;
         while (selection != 999) {
             view.printMenu();
-            String valueForInput;
+//            String valueForInput;
             selection = controller.getIntFromScanner();
             switch (selection) {
                 case 1:
@@ -49,7 +50,7 @@ public class StoresGroupConsoleApplication {
                     String firstName = getStringInput("enter employee first name");
                     String lastName = getStringInput("enter employee last name");
                     String fName = getStringInput("enter employee middle name");
-                    employee.addEmployeeToChain(firstName, getChainIdFromUser(), lastName, fName );
+                    employee.addEmployeeToChain(firstName, getChainIdFromUser(), lastName, fName);
                     break;
 
                 case 4:
@@ -107,9 +108,13 @@ public class StoresGroupConsoleApplication {
         return controller.getIntFromScanner();
     }
 
-    private int getChainIdFromUser() throws SQLException {
-        view.printMessage("enter chain ID from the list bellow");
-        chainAndMall.viewAllChains();
+    public int getChainIdFromUser() {
+
+        try {
+            chainAndMall.viewAllChains();
+        } catch (SQLException e) {
+            view.printMessage("Sorry could not view chain list. Please contact your DB Administrator.");
+        }
         return controller.getIntFromScanner();
     }
 
@@ -119,19 +124,37 @@ public class StoresGroupConsoleApplication {
 
     }
 
-    private void createNewChain() throws SQLException {
+    private void createNewChain() {
         view.printMessage("please enter a name for the new chain");
-        chainAndMall.createChain(controller.getStringFromReader());
+        try {
+            chainAndMall.createChain(controller.getStringFromReader());
+        } catch (SQLException e) {
+            view.printMessage("Sorry could not enter new chain. Please contact your DB Administrator.");
+        }
     }
 
-    private void addStore() throws SQLException {
+    private void addStore() {
         String storeName;
         view.printMessage("enter store name");
         storeName = controller.getStringFromReader();
-        int storeId = getChainIdFromUser();
-        store.addStoreToChain(storeName,storeId);
+        view.printMessage("enter chain ID from the list bellow");
+
+        boolean addedStore = false;
+        while (!addedStore) {
+            try {
+                int chainId = getChainIdFromUser();
+                addedStore = store.addStoreToChain(storeName, chainId);
+
+
+            } catch (SQLException e) {
+                view.printMessage("You have chosen wrong chain ID, please try a valid ID from the list displayed above");
+            }
+        }
+
     }
+
 }
+
 
 
 

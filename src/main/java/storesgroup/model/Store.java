@@ -111,18 +111,20 @@ public class Store {
 
 
 
-    public void addStoreToChain(String storeName, int storeId) throws SQLException {
+    public boolean addStoreToChain(String storeName, int chainID) throws SQLException {
 
         PreparedStatement stmt = connection.prepareStatement("insert into `stores` (store_name,chain) values (?,?);");
         stmt.setString(1, storeName);
-        view.printMessage("Select a chain from the Available chains:  ");
-        stmt.setInt(2, storeId);
+//        view.printMessage("Select a chain from the Available chains:  ");
+        stmt.setInt(2, chainID);
         int result = stmt.executeUpdate();
         if (result == 0) {
           view.printMessage("no updates were done");
+          return false;
         } else {
           view.printMessage("Store was added successfully");
         }
+        return true;
      }
     }
 
