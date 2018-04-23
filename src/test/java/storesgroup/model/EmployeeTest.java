@@ -23,20 +23,26 @@ class EmployeeTest {
     int storeID;
     String storeName;
     String chainName;
+    int CityID;
+
 
     EmployeeTest() throws SQLException {
     }
 
-//
-//    @BeforeEach
-//    public void setUp() throws SQLException {
-//        chainName="testChain"+System.currentTimeMillis();
-//        chain.createChain(chainName);
-//        storeName="testPurpose"+System.currentTimeMillis();
-//        store.addStoreToChain(storeName, chain.getChainID(chainName));
-//        storeID = Integer.valueOf(controller.selectFromDatabase("stores","store_name=\""+storeName+"\"","id"));
-//
-//    }
+
+    @BeforeEach
+    public void setUp() throws SQLException {
+        chainName="testChain"+System.currentTimeMillis();
+        chain.createChain(chainName);
+        storeName="testPurpose"+System.currentTimeMillis();
+        CityID = 1; // TODO select from cities
+        int numberInMall=1;
+        int mallID=1;//TODO select mall
+
+        store.addStoreToChain(storeName, chain.getChainID(chainName),CityID,mallID,numberInMall);
+        storeID = Integer.valueOf(controller.selectFromDatabase("stores","store_name=\""+storeName+"\"","id"));
+
+    }
 
     @AfterEach
     public void tearDown() throws SQLException {
@@ -46,45 +52,45 @@ controller.deleteFromDatabase("stores","store_name=\""+storeName+"\"");
 controller.deleteFromDatabase("chain","name = \""+chainName+"\"");
 
     }
-//    @Test
-//    public void addEmployeToStorePositive() throws SQLException {
-//
-//
-//        employee.addEmployeeToStore("firstNameForTest", storeID, "rieur", "nono");
-//        assertEquals( "rieur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
-//
-//
-//    }
+    @Test
+    public void addEmployeToStorePositive() throws SQLException {
 
-//    @Test
-//    public void addEmployeToStoreNegative() throws SQLException {
-//
-//
-//        employee.addEmployeeToStore("firstNameForTest", storeID, "rieur", "nono");
-//        assertNotEquals( "riefur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
-//
-//
-//    }
 
-//    @Test
-//    public void addEmployeToChainPositive() throws SQLException {
-//
-//
-//        employee.addEmployeeToChain("firstNameForTest", chain.getChainID(chainName), "rieur", "nono");
-//        assertEquals( "rieur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
-//
-//
-//    }
-//
-//    @Test
-//    public void addEmployeToChainNegative() throws SQLException {
-//
-//
-//        employee.addEmployeeToChain("firstNameForTest", chain.getChainID(chainName), "rieur", "nono");
-//        assertNotEquals( "riesssur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
-//
-//
-//    }
+        employee.addEmployeeToStore("firstNameForTest", storeID, "rieur", "nono",1);
+        assertEquals( "rieur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
+
+
+    }
+
+    @Test
+    public void addEmployeToStoreNegative() throws SQLException {
+
+
+        employee.addEmployeeToStore("firstNameForTest", storeID, "rieur", "nono",1);
+        assertNotEquals( "riefur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
+
+
+    }
+
+    @Test
+    public void addEmployeToChainPositive() throws SQLException {
+
+
+        employee.addEmployeeToChain("firstNameForTest", chain.getChainID(chainName),"rieur", "nono",1);
+        assertEquals( "rieur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
+
+
+    }
+
+    @Test
+    public void addEmployeToChainNegative() throws SQLException {
+
+
+        employee.addEmployeeToChain("firstNameForTest", chain.getChainID(chainName), "rieur", "nono",1);
+        assertNotEquals( "riesssur",controller.selectFromDatabase("employees", "first_name = \"firstNameForTest\"", "last_name"));
+
+
+    }
 
 
 
