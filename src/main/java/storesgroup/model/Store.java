@@ -21,28 +21,6 @@ public class Store {
         connection = controller.getConnectionToDB();
     }
 
-    public int getChainIDfromStore(int selectedValue) throws SQLException {
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT chainID from store where idStore=" + selectedValue);
-
-            while (rs.next()) {
-
-                return rs.getInt(1);
-            }
-        return 0;
-    }
-
-    public int getStoreID(String selectedValue) throws SQLException {
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT id from stores where store_name='" + selectedValue+"'");
-
-        while (rs.next()) {
-
-            return rs.getInt(1);
-        }
-        return -1;
-    }
-
     public void viewAllStores() throws SQLException {
 
         Statement stmt = connection.createStatement();
