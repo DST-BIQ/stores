@@ -138,12 +138,17 @@ public class Store {
     }
 
 
-    public boolean addStoreToChain(String storeName, int chainID) throws SQLException {
+    public boolean addStoreToChain(String storeName, int chainId, int cityId, int mallId, int storenumInMall) throws SQLException {
 
-        PreparedStatement stmt = connection.prepareStatement("insert into `stores` (store_name,chain) values (?,?);");
+
+        PreparedStatement stmt = connection.prepareStatement("insert into `stores` (store_name,chain,cityId,mallId,storeNumberInMall) values (?,?,?,?,?);");
         stmt.setString(1, storeName);
-//        view.printMessage("Select a chain from the Available chains:  ");
-        stmt.setInt(2, chainID);
+        stmt.setInt(2, chainId);
+        stmt.setInt(3, cityId);
+        stmt.setInt(4, mallId);
+        stmt.setInt(5, storenumInMall);
+
+
         int result = stmt.executeUpdate();
         if (result == 0) {
             view.printMessage("no updates were done");
@@ -153,6 +158,41 @@ public class Store {
         }
         return true;
     }
+
+
+
+
+    public boolean addStoreToChain(String storeName,int chainIdFromUser, int cityId, String stotrAddress) throws SQLException {
+
+        PreparedStatement stmt = connection.prepareStatement("insert into `stores` (store_name,chain,cityId,streetAddress) values (?,?,?,?);");
+        stmt.setString(1, storeName);
+        stmt.setInt(2, chainIdFromUser);
+        stmt.setInt(3, cityId);
+        stmt.setString(4, stotrAddress);
+
+
+
+        int result = stmt.executeUpdate();
+        if (result == 0) {
+            view.printMessage("no updates were done");
+            return false;
+        } else {
+            view.printMessage("Store was added successfully");
+        }
+        return true;
+    }
+
+
+    public void viewAllCityIDs () throws SQLException {
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from cities;");
+        view.printMessage("Displayed mall cities  :  ");
+
+        while (rs.next()) {
+            view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
+        }
+    }
+
 }
 
 

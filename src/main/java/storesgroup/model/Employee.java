@@ -31,13 +31,13 @@ public class Employee {
      * @param chainID   - selected chain ID
      */
     public void addEmployeeToChain(String firstName,
-                                   int chainID, String lastName, String fname) throws SQLException {
+                                   int chainID, String lastName, String fname, int isManager) throws SQLException {
         int internalChainID = chainID;
 
         PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,ChainID,last_name,fname) values (?,?,?,?,?);");
 
         stmt.setString(1, firstName);
-        stmt.setBoolean(2, true);
+        stmt.setInt(2, isManager);
         stmt.setString(4, lastName);
         stmt.setString(5, fname);
         int result = 0;
@@ -69,12 +69,12 @@ public class Employee {
      * @param firstName - name
      * @param storeID   - id of the selected store
      */
-    public void addEmployeeToStore(String firstName, int storeID, String lastName, String fname) throws SQLException {
+    public void addEmployeeToStore(String firstName, int storeID, String lastName, String fname, int isManager) throws SQLException {
 
         int internalStoreID = storeID;
         PreparedStatement stmt = connection.prepareStatement("insert into `employees` (first_name,isManager,storeID,last_name,fname) values (?,?,?,?,?);");
         stmt.setString(1, firstName);
-        stmt.setBoolean(2, false);
+        stmt.setInt(2, isManager);
 
         stmt.setString(4, lastName);
         stmt.setString(5, fname);

@@ -50,7 +50,14 @@ public class StoresGroupConsoleApplication {
                     String firstName = getStringInput("enter employee first name");
                     String lastName = getStringInput("enter employee last name");
                     String fName = getStringInput("enter employee middle name");
-                    employee.addEmployeeToChain(firstName, getChainIdFromUser(), lastName, fName);
+                    String isManager = getStringInput("enter isManager - y/n");
+                    if (isManager.equals("y") || isManager.equals("Y")) {
+                        employee.addEmployeeToChain(firstName, getChainIdFromUser(), lastName, fName, 1);
+                    }else if (isManager.equals("n") || isManager.equals("N")) {
+                        employee.addEmployeeToChain(firstName, getChainIdFromUser(), lastName, fName, 0);
+                    }else {
+                        view.printMessage("invalid input add employee failed!!!");
+                    }
                     break;
 
                 case 4:
@@ -58,8 +65,14 @@ public class StoresGroupConsoleApplication {
                     firstName = getStringInput("enter employee first name");
                     lastName = getStringInput("enter employee last name");
                     fName = getStringInput("enter employee middle name");
-                    employee.addEmployeeToStore(firstName, getStoreIdFromUser(), lastName, fName);
-                    break;
+                    isManager = getStringInput("enter isManager - y/n");
+                    if (isManager.equals("y") || isManager.equals("Y")) {
+                        employee.addEmployeeToStore(firstName, getChainIdFromUser(), lastName, fName, 1);
+                    }else if (isManager.equals("n") || isManager.equals("N")) {
+                        employee.addEmployeeToStore(firstName, getStoreIdFromUser(), lastName, fName, 0);
+                    }else {
+                        view.printMessage("invalid input add employee failed!!!");
+                    }
 
                 case 5:
 // Present all shops of a mall
@@ -133,27 +146,46 @@ public class StoresGroupConsoleApplication {
         }
     }
 
-    private void addStore() {
+
+    private void addStore() throws SQLException {
         String storeName;
+        int cityId;
         view.printMessage("enter store name");
         storeName = controller.getStringFromReader();
-        view.printMessage("enter chain ID from the list bellow");
+        view.printMessage("Enter City ID from the list bellow ");
 
-        boolean addedStore = false;
-        while (!addedStore) {
-            try {
-                int chainId = getChainIdFromUser();
-                addedStore = store.addStoreToChain(storeName, chainId);
+        store.viewAllCityIDs();
+        cityId= controller.getIntFromScanner();
+        int chainIdFromUser = getChainIdFromUser();
+        view.printMessage("is store in mall?(y/n)");
+        String isStoreInMall = controller.getStringFromReader();
 
-
-            } catch (SQLException e) {
-                view.printMessage("You have chosen wrong chain ID, please try a valid ID from the list displayed above");
-            }
+        if (isStoreInMall.equals("y") || isStoreInMall.equals("Y")){
+            view.printMessage("Enter Mall ID from from the list bellow ");
+            chainAndMall.viewAllMalls();
+            int mallId = controller.getIntFromScanner();
+            int storenumInMall = getIntInput("Enter store number in mall");
+            store.addStoreToChain(storeName,chainIdFromUser,cityId,mallId,storenumInMall);
         }
+        else if (isStoreInMall.equals("n") || isStoreInMall.equals("N")) {
+            String stotrAddress = getStringInput("Enter Store Address");
+            store.addStoreToChain(storeName,chainIdFromUser,cityId,stotrAddress);
+        }
+        else {
+            view.printMessage("invalid input add store failed!!!");
+        }
+
 
     }
 
+    private int getIntInput(String s) {
+        view.printMessage(s);
+        return controller.getIntFromScanner();
+
+    }
 }
+
+
 
 
 
