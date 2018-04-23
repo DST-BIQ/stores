@@ -111,7 +111,7 @@ public class Employee {
         boolean booleanResult = false;
 
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM employees WHERE chainID=?;");
+            PreparedStatement stmt = connection.prepareStatement("SELECT id,first_name,last_name,fname,isManager,storeID FROM employees WHERE chainID=?;");
 
             while (!booleanResult) {
                 stmt.setInt(1, currentIDChain);
