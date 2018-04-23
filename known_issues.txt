@@ -9,6 +9,5 @@ DST Team stores project known issues:
 5. Error handling - print errors returnd from JDBC
 6. Future dev - create View interface for cross platform support
 7. Should add ability to insert City and Street address on adding a store
-8. Improve StoreGroupConsoleApplication class code readability - make code more readable, divide to sub - methods
 
 *************************************************
