@@ -106,9 +106,24 @@ public class Employee {
 
     public void presentAllEmployeesOfChain(int chainID) throws SQLException {
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM employees WHERE chainID=?;");
-        stmt.setInt(1, chainID);
-        try (ResultSet rs = stmt.executeQuery()) {
+        int currentIDChain = chainID;
+        ResultSet rs = null;
+        boolean booleanResult = false;
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT id,first_name,last_name,fname,dateofbirth,isManager,storeID FROM employees WHERE chainID=?;");
+
+            while (!booleanResult) {
+                stmt.setInt(1, currentIDChain);
+                rs = stmt.executeQuery();
+                if (!rs.next()) {
+                    view.printMessage("Sorry no employees to the selected chain, please try a different one");
+                    chainAndMall.viewAllChains();
+                    currentIDChain = controller.getIntFromScanner();
+                } else {
+                    booleanResult = true;
+                }
+            }
             view.printMessage("Displayed Employees:");
             view.printMessage("\tID \t First Name \t LastName \t Fname \t BirthDate t\tIsManager ");
 
@@ -116,7 +131,14 @@ public class Employee {
 
                 view.printMessage("\t" + rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getString(4) + "\t" + rs.getString(5) + "\t" + rs.getString(6) + "");
             }
+
+
+        } catch (SQLException e) {
+            view.printMessage("Sorry could not display list of malls, please contact DBA");
+
         }
+
+
     }
 }
 

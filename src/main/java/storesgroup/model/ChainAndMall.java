@@ -45,36 +45,50 @@ public class ChainAndMall {
             }
     }
 
-    public void viewAllMalls() throws SQLException {
+    public void viewAllMalls() {
 
-         Statement stmt = connection.createStatement();
-         ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from shoppingmalls;");
-         view.printMessage("Displayed malls  :  ");
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from shoppingmalls;");
+            view.printMessage("Displayed malls  :  ");
 
             while (rs.next()) {
-                view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
+                view.printMessage("" + rs.getString(1) + "\t" + rs.getString(2));
+            }
+        }
+            catch(SQLException e){
+                view.printMessage("Sorry could not display list of malls, please contact DBA");
             }
     }
-    public void viewAllMallGroups() throws SQLException {
+    public void viewAllMallGroups()  {
 
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from mallgroups;");
-        view.printMessage("Displayed mall groups  :  ");
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("Select id as ID,name as Name from mallgroups;");
+            view.printMessage("Displayed mall groups  :  ");
 
-        while (rs.next()) {
-            view.printMessage("" + rs.getString(1)+ "\t" + rs.getString(2));
+            while (rs.next()) {
+                view.printMessage("" + rs.getString(1) + "\t" + rs.getString(2));
+            }
+        }catch (SQLException e){
+            view.printMessage("Sorry could not display list of mall groups, please contact DBA");
         }
     }
 
-    public int getChainID(String chainName) throws SQLException {
+    public int getChainID(String chainName)  {
 
         String sql = "Select idchain as ID,name as Name from chain where name = \"" + chainName + "\"";
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        view.printMessage("Displayed chains  :  ");
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            view.printMessage("Displayed chains  :  ");
             if (rs.next()) {
                 return rs.getInt(1);
             }
+
+        }catch (SQLException e){
+            view.printMessage("Wrong chain Name... please select different chain");
+        }
             return -1;
     }
 

@@ -90,19 +90,19 @@ public class StoresGroupConsoleApplication {
 
     }
 
-    private int getMallGroupIdFromUser() throws SQLException {
+    private int getMallGroupIdFromUser(){
         view.printMessage("Please enter requested mall group id from the list bellow");
         chainAndMall.viewAllMallGroups();
         return controller.getIntFromScanner();
     }
 
-    private int getMallIdFromUser() throws SQLException {
-        view.printMessage("Please enter a mall id from the list bellow:");
+    private int getMallIdFromUser()  {
+         view.printMessage("Please enter a mall id from the list bellow:");
         chainAndMall.viewAllMalls();
         return controller.getIntFromScanner();
     }
 
-    private int getStoreIdFromUser() throws SQLException {
+    private int getStoreIdFromUser() {
         view.printMessage("enter store ID from the list bellow");
         store.viewAllStores();
         return controller.getIntFromScanner();
