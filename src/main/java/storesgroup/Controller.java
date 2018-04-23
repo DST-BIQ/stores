@@ -18,7 +18,7 @@ public class Controller {
     static final String PASS = "root";
     static final String DB_NAME = "stores_group"; //TODO properties per user for all configurable issues.
 
-    Scanner scanner;
+//    Scanner scanner;
     View view;
     BufferedReader bufferedReader;
 
@@ -30,31 +30,38 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        scanner = new Scanner(System.in);
+//        scanner = new Scanner(System.in);
         bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
 
     }
 
-//TODO change this to buffered reader as well. we currently have two methods f reading input. redundant.
-    public int getIntFromScanner() {
+    public int getIntFromReader() {
+        String selection;
+        int value=-1;
+        boolean validateIntValue = false;
 
-        boolean correctInput = false;
-        int selection = -1;
-        while (!correctInput) {
+        while (!validateIntValue){
+            try {
+                selection = bufferedReader.readLine();
+
+            } catch (IOException exception) {
+                // Handle exceptions here.
+                return -1;
+            }
             try {
 
-                selection = scanner.nextInt();
-                correctInput = true;
+                 value =  Integer.valueOf(selection);
+                validateIntValue=true;
 
-            } catch (InputMismatchException e) {
-                System.out.println("wrong format selection, please try again");
-                return 999;
+            }
+            catch (NumberFormatException e ){
+                view.printMessage("wrong number format, please enter new value");
             }
         }
 
 
-        return selection;
+return value;
     }
 
     /**
@@ -100,7 +107,7 @@ public class Controller {
 
 
     public void tearDown() {
-        scanner.close();
+//        scanner.close();
         try {
             bufferedReader.close();
         } catch (IOException e) {

@@ -48,7 +48,7 @@ public class Employee {
             } catch (SQLException e) {
                 view.printMessage("Please type in chain ID again. you have probably inserted wrong value");
                 chainAndMall.viewAllChains();
-                internalChainID = controller.getIntFromScanner();
+                internalChainID = controller.getIntFromReader();
 
 
             }
@@ -88,7 +88,7 @@ public class Employee {
             } catch (SQLException e) {
                 view.printMessage("Please type in Store ID again. you have probably inserted wrong value");
                 store.viewAllStores();
-                internalStoreID = controller.getIntFromScanner();
+                internalStoreID = controller.getIntFromReader();
 
 
             }
@@ -119,7 +119,7 @@ public class Employee {
                 if (!rs.next()) {
                     view.printMessage("Sorry no employees to the selected chain, please try a different one");
                     chainAndMall.viewAllChains();
-                    currentIDChain = controller.getIntFromScanner();
+                    currentIDChain = controller.getIntFromReader();
                 } else {
                     booleanResult = true;
                 }

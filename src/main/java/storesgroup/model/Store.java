@@ -63,7 +63,7 @@ public class Store {
                 if (!rs.next()) {
                     view.printMessage("No store with the requested ID was found, please try again");
                         viewAllStores();
-                        currentStoreID = controller.getIntFromScanner();
+                        currentStoreID = controller.getIntFromReader();
 
                 } else {
                     booleanResult=true;

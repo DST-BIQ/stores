@@ -35,7 +35,7 @@ public class StoresGroupConsoleApplication {
         while (selection != 999) {
             view.printMenu();
 //            String valueForInput;
-            selection = controller.getIntFromScanner();
+            selection = controller.getIntFromReader();
             switch (selection) {
                 case 1:
                     // create new chain
@@ -73,7 +73,7 @@ public class StoresGroupConsoleApplication {
                     }else {
                         view.printMessage("invalid input add employee failed!!!");
                     }
-
+break;
                 case 5:
 // Present all shops of a mall
                     store.presentStoresInMall(getMallIdFromUser());
@@ -106,19 +106,19 @@ public class StoresGroupConsoleApplication {
     private int getMallGroupIdFromUser(){
         view.printMessage("Please enter requested mall group id from the list bellow");
         chainAndMall.viewAllMallGroups();
-        return controller.getIntFromScanner();
+        return controller.getIntFromReader();
     }
 
     private int getMallIdFromUser()  {
          view.printMessage("Please enter a mall id from the list bellow:");
         chainAndMall.viewAllMalls();
-        return controller.getIntFromScanner();
+        return controller.getIntFromReader();
     }
 
     private int getStoreIdFromUser() {
         view.printMessage("enter store ID from the list bellow");
         store.viewAllStores();
-        return controller.getIntFromScanner();
+        return controller.getIntFromReader();
     }
 
     public int getChainIdFromUser() {
@@ -128,7 +128,7 @@ public class StoresGroupConsoleApplication {
         } catch (SQLException e) {
             view.printMessage("Sorry could not view chain list. Please contact your DB Administrator.");
         }
-        return controller.getIntFromScanner();
+        return controller.getIntFromReader();
     }
 
     private String getStringInput(String s) {
@@ -150,21 +150,49 @@ public class StoresGroupConsoleApplication {
     private void addStore() throws SQLException {
         String storeName;
         int cityId;
+        int chainIdFromUser;
+        int mallId;
+        int storenumInMall;
         view.printMessage("enter store name");
         storeName = controller.getStringFromReader();
+
         view.printMessage("Enter City ID from the list bellow ");
 
-        store.viewAllCityIDs();
-        cityId= controller.getIntFromScanner();
-        int chainIdFromUser = getChainIdFromUser();
+        do {
+            store.viewAllCityIDs();
+            cityId = controller.getIntFromReader();
+        }
+        while (controller.selectFromDatabase("cities","id="+cityId,"name")==null);
+
+        do {
+
+            chainIdFromUser = getChainIdFromUser();
+        }
+        while (controller.selectFromDatabase("chain","idchain="+chainIdFromUser,"name")==null);
+
         view.printMessage("is store in mall?(y/n)");
         String isStoreInMall = controller.getStringFromReader();
 
         if (isStoreInMall.equals("y") || isStoreInMall.equals("Y")){
-            view.printMessage("Enter Mall ID from from the list bellow ");
-            chainAndMall.viewAllMalls();
-            int mallId = controller.getIntFromScanner();
-            int storenumInMall = getIntInput("Enter store number in mall");
+
+
+            do {
+
+                view.printMessage("Enter Mall ID from from the list bellow ");
+                chainAndMall.viewAllMalls();
+                mallId = controller.getIntFromReader();
+            }
+            while (controller.selectFromDatabase("shoppingmalls","id="+mallId,"name")==null);
+
+
+
+                storenumInMall = getIntInput("Enter store number in mall");
+
+//                while (storenumInMall==-1){
+//                    view.printMessage("sorry you have selected wrong store, please re-select");
+//                    storenumInMall = getIntInput("Enter store number in mall");
+//                }
+
             store.addStoreToChain(storeName,chainIdFromUser,cityId,mallId,storenumInMall);
         }
         else if (isStoreInMall.equals("n") || isStoreInMall.equals("N")) {
@@ -180,9 +208,13 @@ public class StoresGroupConsoleApplication {
 
     private int getIntInput(String s) {
         view.printMessage(s);
-        return controller.getIntFromScanner();
+
+        return controller.getIntFromReader();
 
     }
+
+
+
 }
 
 
